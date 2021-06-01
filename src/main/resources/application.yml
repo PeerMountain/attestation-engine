@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/oracle
+    username: oracle
+    password: oracle
+    driverClassName: org.postgresql.Driver
+
+xmpp:
+  domain: jabber.hot-chilli.net
+  userName: oracle
+  password: oracle
+  host: jabber.hot-chilli.net
