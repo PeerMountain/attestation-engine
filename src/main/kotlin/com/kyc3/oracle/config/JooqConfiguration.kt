@@ -1,5 +1,6 @@
 package com.kyc3.oracle.config
 
+import org.jooq.SQLDialect
 import org.jooq.impl.DataSourceConnectionProvider
 import org.jooq.impl.DefaultConfiguration
 import org.jooq.impl.DefaultDSLContext
@@ -18,7 +19,10 @@ class JooqConfiguration {
   @Bean
   fun configuration(connectionProvider: DataSourceConnectionProvider): DefaultConfiguration =
       DefaultConfiguration()
-          .also { it.set(connectionProvider) }
+          .also {
+            it.set(connectionProvider)
+            it.setSQLDialect(SQLDialect.POSTGRES)
+          }
 
   @Bean
   fun dsl(configuration: DefaultConfiguration): DefaultDSLContext =
