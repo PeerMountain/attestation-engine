@@ -9,15 +9,21 @@ class AttestationProviderRepository(
     private val dsl: DSLContext
 ) {
 
-  fun create(name: String, transaction: String): Int =
+  fun create(
+      name: String,
+      address: String,
+      transaction: String
+  ): Int =
       dsl.insertInto(Tables.ATTESTATION_PROVIDER)
           .columns(
               Tables.ATTESTATION_PROVIDER.NAME,
+              Tables.ATTESTATION_PROVIDER.ADDRESS,
               Tables.ATTESTATION_PROVIDER.INITIAL_TRANSACTION,
               Tables.ATTESTATION_PROVIDER.STATUS
           )
           .values(
               name,
+              address,
               transaction,
               "IN_PROGRESS"
           )

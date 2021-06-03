@@ -8,6 +8,10 @@ class AttestationProviderService(
     private val attestationProviderRepository: AttestationProviderRepository
 ) {
 
-  fun create(name: String, transaction: String) =
-      attestationProviderRepository.create(name, transaction)
+  fun create(
+      name: String,
+      address: String,
+      transaction: String
+  ) =
+      attestationProviderRepository.create(name, address, transaction)
 }

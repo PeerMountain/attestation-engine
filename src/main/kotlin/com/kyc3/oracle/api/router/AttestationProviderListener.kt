@@ -1,25 +1,30 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
-import com.kyc3.oracle.attestation.AttestationProvider
+import com.kyc3.oracle.attestation.AttestationProviderOuterClass
 import com.kyc3.oracle.service.AttestationProviderService
+import okhttp3.internal.addHeaderLenient
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
 class AttestationProviderListener(
     private val attestationProviderService: AttestationProviderService
-) : OracleListener<AttestationProvider.AttestationProviderRegister> {
+) : OracleListener<AttestationProviderOuterClass.AttestationProviderRegister> {
   private val log = LoggerFactory.getLogger(javaClass)
 
-  override fun type(): Class<AttestationProvider.AttestationProviderRegister> =
-      AttestationProvider.AttestationProviderRegister::class.java
+  override fun type(): Class<AttestationProviderOuterClass.AttestationProviderRegister> =
+      AttestationProviderOuterClass.AttestationProviderRegister::class.java
 
   override fun accept(event: Any) {
     event.unpack(type())
         .also {
           log.info("process='AttestationProviderListener' message='received message' event='${it}'")
-          attestationProviderService.create(it.name, it.transaction)
+          attestationProviderService.create(
+              name = it.provider.name,
+              address = it.provider.address,
+              transaction = it.transaction
+          )
         }
   }
 }
