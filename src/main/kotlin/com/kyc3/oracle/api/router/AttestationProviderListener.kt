@@ -3,7 +3,7 @@ package com.kyc3.oracle.api.router
 import com.google.protobuf.Any
 import com.kyc3.oracle.attestation.AttestationProviderOuterClass
 import com.kyc3.oracle.service.AttestationProviderService
-import okhttp3.internal.addHeaderLenient
+import org.jivesoftware.smack.chat2.Chat
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
@@ -16,7 +16,7 @@ class AttestationProviderListener(
   override fun type(): Class<AttestationProviderOuterClass.AttestationProviderRegister> =
       AttestationProviderOuterClass.AttestationProviderRegister::class.java
 
-  override fun accept(event: Any) {
+  override fun accept(event: Any, chat: Chat) {
     event.unpack(type())
         .also {
           log.info("process='AttestationProviderListener' message='received message' event='${it}'")

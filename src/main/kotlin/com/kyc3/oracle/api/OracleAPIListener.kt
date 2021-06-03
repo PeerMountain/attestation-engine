@@ -20,7 +20,7 @@ class OracleAPIListener(
     chatManager.addIncomingListener { from, message, chat ->
       log.info("process='OracleAPIListener' from='${from.asUnescapedString()}' message='received an event'")
       messageParser.parseMessage(message)
-          .let { oracleRouter.route(it) }
+          .let { oracleRouter.route(it, chat) }
     }
   }
 }

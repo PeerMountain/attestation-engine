@@ -17,6 +17,9 @@ class AttestationProviderService(
   ) =
       attestationProviderRepository.create(name, address, transaction)
 
+  fun getProviderByAddress(address: String): AttestationProviderRecord? =
+      attestationProviderRepository.findByAddress(address)
+
   fun confirmRegistration(name: String, address: String): Boolean =
       attestationProviderRepository.changeStatus(name, address, "CONFIRMED")
 

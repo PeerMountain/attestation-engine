@@ -45,4 +45,9 @@ class AttestationProviderRepository(
           .and(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(address))
           .execute() == 1
 
+  fun findByAddress(address: String): AttestationProviderRecord? =
+      dsl.selectFrom(Tables.ATTESTATION_PROVIDER)
+          .where(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(address))
+          .fetchOne()
+
 }
