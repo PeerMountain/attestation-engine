@@ -1,6 +1,6 @@
-package com.kyc3.oracle.service
+package com.kyc3.oracle.api
 
-import com.kyc3.oracle.service.router.OracleRouter
+import com.kyc3.oracle.api.router.OracleRouter
 import org.jivesoftware.smack.chat2.ChatManager
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service

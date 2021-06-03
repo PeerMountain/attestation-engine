@@ -1,4 +1,4 @@
-package com.kyc3.oracle.service.router
+package com.kyc3.oracle.api.router
 
 import com.kyc3.oracle.OracleMessageOuterClass
 import org.slf4j.LoggerFactory

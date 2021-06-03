@@ -3,7 +3,6 @@ package com.kyc3.oracle.config
 import org.jooq.impl.DataSourceConnectionProvider
 import org.jooq.impl.DefaultConfiguration
 import org.jooq.impl.DefaultDSLContext
-import org.jooq.impl.DefaultExecuteListenerProvider
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy
@@ -17,9 +16,7 @@ class JooqConfiguration {
       DataSourceConnectionProvider(TransactionAwareDataSourceProxy(dataSource))
 
   @Bean
-  fun configuration(
-      connectionProvider: DataSourceConnectionProvider
-  ): DefaultConfiguration =
+  fun configuration(connectionProvider: DataSourceConnectionProvider): DefaultConfiguration =
       DefaultConfiguration()
           .also { it.set(connectionProvider) }
 

@@ -1,4 +1,4 @@
-package com.kyc3.oracle.service
+package com.kyc3.oracle.api
 
 import org.springframework.stereotype.Service
 import org.jivesoftware.smack.packet.Message

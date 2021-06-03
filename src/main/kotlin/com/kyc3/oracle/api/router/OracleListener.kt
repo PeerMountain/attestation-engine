@@ -1,4 +1,4 @@
-package com.kyc3.oracle.service.router
+package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
 import com.google.protobuf.GeneratedMessageV3

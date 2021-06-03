@@ -4,6 +4,7 @@ plugins {
   id("org.springframework.boot") version "2.5.0"
   id("io.spring.dependency-management") version "1.0.11.RELEASE"
   id("org.flywaydb.flyway") version "7.9.1"
+  id("nu.studer.jooq") version "5.2.1"
   kotlin("jvm") version "1.5.10"
   kotlin("plugin.spring") version "1.5.10"
 }
@@ -23,6 +24,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-webflux")
 
   implementation("org.springframework.boot:spring-boot-starter-jooq")
+  jooqGenerator("org.postgresql:postgresql:42.2.14")
 
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
@@ -62,4 +64,43 @@ flyway {
   user = "oracle"
   password = "oracle"
   schemas = arrayOf("public")
+}
+
+jooq {
+  version.set("3.14.7")
+  edition.set(nu.studer.gradle.jooq.JooqEdition.OSS)
+
+  configurations {
+    create("main") {
+      generateSchemaSourceOnCompilation.set(true)
+
+      jooqConfiguration.apply {
+        logging = org.jooq.meta.jaxb.Logging.WARN
+        jdbc.apply {
+          driver = "org.postgresql.Driver"
+          url = "jdbc:postgresql://localhost:5432/oracle"
+          user = "oracle"
+          password = "oracle"
+        }
+        generator.apply {
+          name = "org.jooq.codegen.DefaultGenerator"
+          database.apply {
+            name = "org.jooq.meta.postgres.PostgresDatabase"
+            inputSchema = "public"
+          }
+          generate.apply {
+            isDeprecated = false
+            isRecords = true
+            isImmutablePojos = true
+            isFluentSetters = true
+          }
+          target.apply {
+            packageName = "com.kyc3.oracle.types"
+            directory = "build/generated-src/jooq/main"
+          }
+          strategy.name = "org.jooq.codegen.DefaultGeneratorStrategy"
+        }
+      }
+    }
+  }
 }
