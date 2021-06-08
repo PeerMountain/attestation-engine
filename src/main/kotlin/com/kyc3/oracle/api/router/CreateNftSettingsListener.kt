@@ -7,13 +7,13 @@ import org.jivesoftware.smack.chat2.Chat
 import org.springframework.stereotype.Component
 
 @Component
-class CreateNftListener(
+class CreateNftSettingsListener(
     private val nftService: NftSettingsService
 ) : OracleListener<AttestationProviderOuterClass.CreateNftRequest> {
   override fun type(): Class<AttestationProviderOuterClass.CreateNftRequest> =
       AttestationProviderOuterClass.CreateNftRequest::class.java
 
   override fun accept(event: Any, chat: Chat) {
-    nftService.createNft(event.unpack(AttestationProviderOuterClass.CreateNftRequest::class.java))
+    nftService.createNft(event.unpack(type()))
   }
 }
