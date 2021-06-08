@@ -5,6 +5,7 @@ import com.google.protobuf.GeneratedMessageV3
 import com.kyc3.oracle.OracleMessageOuterClass
 import org.jivesoftware.smack.chat2.Chat
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class OracleAPIResponse {
@@ -15,8 +16,7 @@ class OracleAPIResponse {
           .setMessage(Any.pack(message))
           .build()
           .toByteArray()
-          .toString()
+          .let { Arrays.toString(it) }
           .let { chat.send(it) }
 
 }
-
