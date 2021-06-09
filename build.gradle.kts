@@ -13,11 +13,6 @@ group = "com.kyc3"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
-repositories {
-  mavenCentral()
-  mavenLocal()
-}
-
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-jdbc")
   implementation("org.springframework.boot:spring-boot-starter-jooq")
@@ -43,7 +38,7 @@ dependencies {
   implementation("org.web3j:core:5.0.0")
   implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
-  implementation("com.kyc3:oracle-definitions:09982d9")
+  implementation("com.kyc3:oracle-definitions:0e9d217")
 
   runtimeOnly("org.postgresql:postgresql")
 
