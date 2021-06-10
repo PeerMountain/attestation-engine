@@ -18,6 +18,17 @@ gradle.projectsLoaded {
           create<HttpHeaderAuthentication>("header")
         }
       }
+      maven {
+        url = uri("https://gitlab.amlapi.com/api/v4/projects/57/packages/maven")
+        name = "GitLabCI"
+        credentials(HttpHeaderCredentials::class.java) {
+          name = "Job-Token"
+          value = System.getenv("CI_JOB_TOKEN")
+        }
+        authentication {
+          create<HttpHeaderAuthentication>("header")
+        }
+      }
     }
   }
 }
