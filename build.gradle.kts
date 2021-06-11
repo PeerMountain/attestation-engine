@@ -106,8 +106,18 @@ val stopPostgresContainer by tasks.creating(DockerStopContainer::class) {
 
 val buildAppDockerImage by tasks.creating(DockerBuildImage::class) {
   inputDir.set(file("."))
+  images.add("registry.amlapi.com/kyc3/pmo-oracle-be/oracle:$commit")
   images.add("oracle:$commit")
   images.add("oracle:latest")
+  images.add("registry.amlapi.com/kyc3/pmo-oracle-be/oracle:latest")
+}
+
+val pushAppDockerImage by tasks.creating(DockerPushImage::class) {
+  images.add("registry.amlapi.com/kyc3/pmo-oracle-be/oracle:latest")
+  images.add("registry.amlapi.com/kyc3/pmo-oracle-be/oracle:$commit")
+  registryCredentials.username.set(System.getenv("CI_REGISTRY_USER"))
+  registryCredentials.password.set(System.getenv("CI_REGISTRY_PASSWORD"))
+  registryCredentials.url.set("registry.amlapi.com")
 }
 
 jooq {
