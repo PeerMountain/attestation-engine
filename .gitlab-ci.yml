@@ -1,8 +1,6 @@
-default:
-  image: openjdk:11
-
 stages:
   - build
+  - publish_image
 
 before_script:
   #  - echo `pwd` # debug
@@ -13,15 +11,32 @@ cache:
   paths:
     - .gradle/wrapper
     - .gradle/caches
+    - build
 
 build:
   stage: build
+  image: openjdk:11
   variables:
     DOCKER_HOST: "tcp://dind:2375"
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
   script:
-    - ./gradlew build
+    - ./gradlew clean build
+
+publish_image:
+  image:
+    name: openjdk:11
+    entrypoint: [ "" ]
+  stage: publish_image
+  variables:
+    DOCKER_HOST: "tcp://dind:2375"
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - ./gradlew buildAppDockerImage
+    - ./gradlew pushAppDockerImage
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
 
 after_script:
   - echo "End CI"
