@@ -35,6 +35,8 @@ publish_image:
   script:
     - ./gradlew buildAppDockerImage
     - ./gradlew pushAppDockerImage
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
 
 after_script:
   - echo "End CI"
