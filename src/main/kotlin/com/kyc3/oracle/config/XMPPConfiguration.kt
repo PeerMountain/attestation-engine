@@ -32,11 +32,4 @@ class XMPPConfiguration(
   @Bean
   fun chatManager(xmpptcpConnection: XMPPTCPConnection): ChatManager =
       ChatManager.getInstanceFor(xmpptcpConnection)
-          .also {
-            val jid = JidCreate.entityBareFrom("baeldung2@jabb3r.org")
-            val chat = it.chatWith(jid)
-
-            chat.send("Hello!")
-
-          }
 }
