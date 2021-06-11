@@ -3,6 +3,7 @@ default:
 
 stages:
   - build
+  - publish_image
 
 before_script:
   #  - echo `pwd` # debug
@@ -13,6 +14,7 @@ cache:
   paths:
     - .gradle/wrapper
     - .gradle/caches
+    - build
 
 build:
   stage: build
@@ -21,7 +23,16 @@ build:
     DOCKER_DRIVER: overlay2
     DOCKER_TLS_CERTDIR: ""
   script:
-    - ./gradlew build
+    - ./gradlew clean build
+
+publish_image:
+  stage: publish_image
+  variables:
+    DOCKER_HOST: "tcp://dind:2375"
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  script:
+    - ./gradlew buildAppDockerImage
 
 after_script:
   - echo "End CI"

@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.bmuschko.gradle.docker.tasks.container.*
 import com.bmuschko.gradle.docker.tasks.image.*
 import java.lang.Thread.sleep
+import org.ajoberstar.grgit.Grgit
 
 plugins {
   id("org.springframework.boot") version "2.5.0"
@@ -11,11 +12,16 @@ plugins {
   kotlin("jvm") version "1.5.10"
   kotlin("plugin.spring") version "1.5.10"
   id("com.bmuschko.docker-remote-api") version "7.0.1"
+  id("org.ajoberstar.grgit") version "4.0.1"
 }
 
 group = "com.kyc3"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
+
+val grgit = Grgit.open(mapOf("dir" to project.projectDir))
+val commit = grgit.head().abbreviatedId
+
 
 val testContainerVersion = "1.15.3"
 
@@ -96,6 +102,12 @@ val startPostgresContainer by tasks.creating(DockerStartContainer::class) {
 
 val stopPostgresContainer by tasks.creating(DockerStopContainer::class) {
   targetContainerId(createPostgresContainer.getContainerId())
+}
+
+val buildAppDockerImage by tasks.creating(DockerBuildImage::class) {
+  inputDir.set(file("."))
+  images.add("oracle:$commit")
+  images.add("oracle:latest")
 }
 
 jooq {
