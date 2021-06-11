@@ -1,12 +1,15 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/oracle
-    username: oracle
-    password: oracle
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/oracle}
+    username: ${DATABASE_USERNAME:oracle}
+    password: ${DATABASE_PASSWORD:oracle}
     driverClassName: org.postgresql.Driver
 
 xmpp:
-  domain: jabber.hot-chilli.net
-  userName: oracle
-  password: oracle
-  host: jabber.hot-chilli.net
+  domain: ${XMPP_DOMAIN:jabber.hot-chilli.net}
+  userName: ${XMPP_USERNAME:oracle}
+  password: ${XMPP_PASSWORD:oracle}
+  host: ${XMPP_HOST:jabber.hot-chilli.net}
+
+web3:
+  host: http://localhost:8545
