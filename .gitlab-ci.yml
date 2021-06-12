@@ -1,42 +1,69 @@
 stages:
   - build
-  - publish_image
+  - push
 
 before_script:
-  #  - echo `pwd` # debug
-  #  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
 cache:
   paths:
     - .gradle/wrapper
     - .gradle/caches
-    - build
 
 build:
   stage: build
   image: openjdk:11
-  variables:
-    DOCKER_HOST: "tcp://dind:2375"
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
   script:
     - ./gradlew clean build
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 week
 
-publish_image:
+build_image:
+  stage: build
   image:
-    name: openjdk:11
-    entrypoint: [ "" ]
-  stage: publish_image
-  variables:
-    DOCKER_HOST: "tcp://dind:2375"
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ""
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
-    - ./gradlew buildAppDockerImage
-    - ./gradlew pushAppDockerImage
+    - mkdir -p /root/.docker
+    - >
+      echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" >
+      /kaniko/.docker/config.json
+    - >
+      /kaniko/executor --cleanup --snapshotMode=redo --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile
+      --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+  dependencies:
+    - build
+
+push_latest:
+  stage: push
+  image:
+    name: gcr.io/go-containerregistry/crane:debug
+    entrypoint: [""]
+  cache: {}
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - crane tag $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG latest
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
 
-after_script:
-  - echo "End CI"
+push_tags:
+  stage: push
+  image:
+    name: gcr.io/go-containerregistry/crane:debug
+    entrypoint: [""]
+  cache: {}
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - crane auth login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - crane tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_COMMIT_TAG
+  only:
+    - tags
+  except:
+    - branches
