@@ -35,8 +35,6 @@ build_image:
       --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
   rules:
     - if: $CI_COMMIT_BRANCH == 'master'
-  dependencies:
-    - build
 
 push_latest:
   stage: push
