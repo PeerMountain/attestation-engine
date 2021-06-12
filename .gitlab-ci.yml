@@ -24,6 +24,8 @@ compile:
     paths:
       - build/
     expire_in: 1 week
+  except:
+    - tags
 
 build_image:
   stage: build
