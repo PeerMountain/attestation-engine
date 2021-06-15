@@ -12,4 +12,4 @@ xmpp:
   host: ${XMPP_HOST:jabber.hot-chilli.net}
 
 web3:
-  host: http://localhost:8545
+  host: ${WEB3_HOST:http://localhost:8545}

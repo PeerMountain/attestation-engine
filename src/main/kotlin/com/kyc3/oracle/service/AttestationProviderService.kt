@@ -6,38 +6,41 @@ import org.springframework.stereotype.Service
 
 @Service
 class AttestationProviderService(
-    private val attestationProviderRepository: AttestationProviderRepository,
-    private val web3Service: Web3Service
+  private val attestationProviderRepository: AttestationProviderRepository,
+  private val web3Service: Web3Service
 ) {
 
   fun create(
-      name: String,
-      address: String,
-      transaction: String
+    name: String,
+    address: String,
+    transaction: String
   ) =
-      attestationProviderRepository.create(name, address, transaction)
+    attestationProviderRepository.create(name, address, transaction)
 
   fun getProviderByAddress(address: String): AttestationProviderRecord? =
-      attestationProviderRepository.findByAddress(address)
+    attestationProviderRepository.findByAddress(address)
 
   fun confirmRegistration(name: String, address: String): Boolean =
-      attestationProviderRepository.changeStatus(name, address, "CONFIRMED")
+    attestationProviderRepository.changeStatus(name, address, "CONFIRMED")
 
   fun failRegistration(name: String, address: String): Boolean =
-      attestationProviderRepository.changeStatus(name, address, "FAILED")
+    attestationProviderRepository.changeStatus(name, address, "FAILED")
 
 
   fun findProvidersToProcess() =
-      attestationProviderRepository.findFirstWithStatus(
-          10,
-          "IN_PROGRESS"
-      )
+    attestationProviderRepository.findFirstWithStatus(
+      10,
+      "IN_PROGRESS"
+    )
 
   fun validateProviderRegistration(provider: AttestationProviderRecord) {
-    if (web3Service.isTransactionValid(provider.initialTransaction, provider.address)) {
-      confirmRegistration(provider.name, provider.address)
-    } else {
-      failRegistration(provider.name, provider.address)
-    }
+    web3Service.isTransactionValid(provider.initialTransaction, provider.address)
+      .ifPresent {
+        if (it) {
+          confirmRegistration(provider.name, provider.address)
+        } else {
+          failRegistration(provider.name, provider.address)
+        }
+      }
   }
 }
