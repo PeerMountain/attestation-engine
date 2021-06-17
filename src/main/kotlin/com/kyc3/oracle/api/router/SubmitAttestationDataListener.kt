@@ -23,6 +23,7 @@ class SubmitAttestationDataListener(
         attestationDataService.submitAttestationData(
           AttestationDataDto(
             providerAddress = it.apAddress,
+            customerAddress = it.customerAddress,
             data = it.data,
             hashKeyArray = "0x10000006C350000022828531e543c61788be00d3ee000000000735233B600000",
             tokenUri = "https://short.ly/abc",

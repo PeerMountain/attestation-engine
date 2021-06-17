@@ -27,4 +27,9 @@ class AttestationDataRepository(
         record.hashedData
       )
       .execute()
+
+  fun findByProviderId(providerId: Long) =
+    dsl.selectFrom(Tables.ATTESTATION_DATA)
+      .where(Tables.ATTESTATION_DATA.PROVIDER_ID.eq(providerId))
+      .toList()
 }
