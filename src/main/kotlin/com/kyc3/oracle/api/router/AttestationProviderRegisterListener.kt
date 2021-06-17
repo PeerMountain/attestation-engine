@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 
 @Component
-class AttestationProviderListener(
+class AttestationProviderRegisterListener(
     private val attestationProviderService: AttestationProviderService
 ) : OracleListener<AttestationProviderOuterClass.AttestationProviderRegister> {
   private val log = LoggerFactory.getLogger(javaClass)
