@@ -33,6 +33,12 @@ class AttestationProviderService(
       "IN_PROGRESS"
     )
 
+  fun findConfirmedProviders() =
+    attestationProviderRepository.findFirstWithStatus(
+      10,
+      "CONFIRMED"
+    )
+
   fun validateProviderRegistration(provider: AttestationProviderRecord) {
     web3Service.isTransactionValid(provider.initialTransaction, provider.address)
       .ifPresent {
