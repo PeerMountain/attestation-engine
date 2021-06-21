@@ -14,6 +14,7 @@ class AttestationDataRepository(
     dsl.insertInto(Tables.ATTESTATION_DATA)
       .columns(
         Tables.ATTESTATION_DATA.PROVIDER_ID,
+        Tables.ATTESTATION_DATA.CUSTOMER_ADDRESS,
         Tables.ATTESTATION_DATA.DATA,
         Tables.ATTESTATION_DATA.HASH_KEY_ARRAY,
         Tables.ATTESTATION_DATA.TOKEN_URI,
@@ -21,6 +22,7 @@ class AttestationDataRepository(
       )
       .values(
         record.providerId,
+        record.customerAddress,
         record.data,
         record.hashKeyArray,
         record.tokenUri,
