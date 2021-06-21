@@ -34,4 +34,10 @@ class AttestationDataRepository(
     dsl.selectFrom(Tables.ATTESTATION_DATA)
       .where(Tables.ATTESTATION_DATA.PROVIDER_ID.eq(providerId))
       .toList()
+
+  fun updateSignedMessage(id: Long, signedMessage: String): Int =
+    dsl.update(Tables.ATTESTATION_DATA)
+      .set(Tables.ATTESTATION_DATA.SIGNED_DATA, signedMessage)
+      .where(Tables.ATTESTATION_DATA.ID.eq(id))
+      .execute()
 }

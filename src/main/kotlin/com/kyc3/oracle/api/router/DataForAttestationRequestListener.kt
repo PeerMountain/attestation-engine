@@ -22,6 +22,7 @@ class DataForAttestationRequestListener(
       .let { list ->
         list.map {
           AttestationProviderOuterClass.AttestationData.newBuilder()
+            .setId(it.id)
             .setCustomerAddress(it.customerAddress)
             .setData(it.data)
             .setHashKeyArray(it.hashKeyArray)
