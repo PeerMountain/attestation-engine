@@ -22,13 +22,19 @@ class AttestationDataRequestListener(
       }
       .let {
         it.map { record ->
-          AttestationProviderOuterClass.AttestationData.newBuilder()
-            .setId(record.id)
-            .setCustomerAddress(record.customerAddress)
-            .setData(record.data)
-            .setHashKeyArray(record.hashKeyArray)
-            .setTokenUri(record.tokenUri)
-            .setHashedData(record.hashedData)
+          AttestationProviderOuterClass.SignedAttestationData
+            .newBuilder()
+            .setAttestation(
+              AttestationProviderOuterClass.AttestationData.newBuilder()
+                .setId(record.id)
+                .setCustomerAddress(record.customerAddress)
+                .setData(record.data)
+                .setHashKeyArray(record.hashKeyArray)
+                .setTokenUri(record.tokenUri)
+                .setHashedData(record.hashedData)
+                .build()
+            )
+            .setSignedMessage(record.signedData)
             .build()
         }
       }

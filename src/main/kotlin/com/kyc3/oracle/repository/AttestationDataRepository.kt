@@ -44,5 +44,6 @@ class AttestationDataRepository(
   fun findByCustomerAddress(customerAddress: String): List<AttestationDataRecord> =
     dsl.selectFrom(Tables.ATTESTATION_DATA)
       .where(Tables.ATTESTATION_DATA.CUSTOMER_ADDRESS.eq(customerAddress))
+      .and(Tables.ATTESTATION_DATA.SIGNED_DATA.isNotNull)
       .toList()
 }
