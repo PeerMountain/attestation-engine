@@ -38,4 +38,7 @@ class AttestationDataService(
 
   fun signAttestationData(id: Long, signedMessage: String) =
     attestationDataRepository.updateSignedMessage(id, signedMessage)
+
+  fun findUserAttestations(customerAddress: String): List<AttestationDataRecord> =
+    attestationDataRepository.findByCustomerAddress(customerAddress)
 }
