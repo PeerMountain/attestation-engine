@@ -35,4 +35,7 @@ class AttestationDataService(
     attestationProviderRepository.findByAddress(apAddress)
       ?.let { attestationDataRepository.findByProviderId(it.id) }
       ?: emptyList()
+
+  fun signAttestationData(id: Long, signedMessage: String) =
+    attestationDataRepository.updateSignedMessage(id, signedMessage)
 }
