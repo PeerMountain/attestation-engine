@@ -24,7 +24,7 @@ class NftSettingsService(
                 request.nftSettings.type,
                 request.nftSettings.perpetuity,
                 request.nftSettings.price,
-                LocalDateTime.ofInstant(Instant.ofEpochMilli(request.nftSettings.expiration), ZoneId.systemDefault()),
+                LocalDateTime.ofInstant(Instant.ofEpochSecond(request.nftSettings.expiration), ZoneId.of("UTC")),
                 request.nftSettings.signedMessage
             ))
           }
