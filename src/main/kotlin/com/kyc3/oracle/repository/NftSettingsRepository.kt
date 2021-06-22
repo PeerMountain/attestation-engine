@@ -49,7 +49,7 @@ class NftSettingsRepository(
                 apAddress = it.get(Tables.ATTESTATION_PROVIDER.ADDRESS),
                 type = it.get(Tables.NFT_SETTINGS.TYPE),
                 perpetuity = it.get(Tables.NFT_SETTINGS.PERPETUITY),
-                expiration = it.get(Tables.NFT_SETTINGS.EXPIRATION).toInstant(ZoneOffset.UTC).toEpochMilli(),
+                expiration = it.get(Tables.NFT_SETTINGS.EXPIRATION).toInstant(ZoneOffset.UTC).epochSecond,
                 price = it.get(Tables.NFT_SETTINGS.PRICE),
                 signedMessage = it.get(Tables.NFT_SETTINGS.SIGNED_MESSAGE),
             )
