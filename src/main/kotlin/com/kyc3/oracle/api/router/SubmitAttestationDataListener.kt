@@ -22,7 +22,7 @@ class SubmitAttestationDataListener(
       .let {
         attestationDataService.submitAttestationData(
           AttestationDataDto(
-            providerAddress = it.apAddress,
+            nftType = it.nftType,
             customerAddress = it.customerAddress,
             data = it.data,
             hashKeyArray = "0x10000006C350000022828531e543c61788be00d3ee000000000735233B600000",
