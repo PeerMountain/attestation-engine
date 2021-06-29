@@ -1,8 +1,10 @@
 package com.kyc3.oracle.service
 
 import com.kyc3.oracle.model.AttestationDataDto
+import com.kyc3.oracle.model.EnrichedAttestationData
 import com.kyc3.oracle.repository.AttestationDataRepository
 import com.kyc3.oracle.repository.AttestationProviderRepository
+import com.kyc3.oracle.repository.NftSettingsRepository
 import com.kyc3.oracle.types.tables.records.AttestationDataRecord
 import org.jooq.Result
 import org.springframework.stereotype.Service
@@ -10,11 +12,12 @@ import org.springframework.stereotype.Service
 @Service
 class AttestationDataService(
   private val attestationDataRepository: AttestationDataRepository,
-  private val attestationProviderRepository: AttestationProviderRepository
+  private val attestationProviderRepository: AttestationProviderRepository,
+  private val nftSettingsRepository: NftSettingsRepository
 ) {
 
   fun submitAttestationData(attestationData: AttestationDataDto) {
-    attestationProviderRepository.findByAddress(attestationData.providerAddress)
+    nftSettingsRepository.findByNftType(attestationData.nftType)
       ?.let {
         attestationDataRepository.create(
           AttestationDataRecord(
@@ -31,14 +34,12 @@ class AttestationDataService(
       }
   }
 
-  fun findDataForAttestation(apAddress: String) =
-    attestationProviderRepository.findByAddress(apAddress)
-      ?.let { attestationDataRepository.findByProviderId(it.id) }
-      ?: emptyList()
+  fun findDataForAttestation(apAddress: String): List<AttestationDataRecord> =
+    attestationDataRepository.findAllForProvider(apAddress)
 
   fun signAttestationData(id: Long, signedMessage: String) =
     attestationDataRepository.updateSignedMessage(id, signedMessage)
 
-  fun findUserAttestations(customerAddress: String): List<AttestationDataRecord> =
+  fun findUserAttestations(customerAddress: String): List<EnrichedAttestationData> =
     attestationDataRepository.findByCustomerAddress(customerAddress)
 }

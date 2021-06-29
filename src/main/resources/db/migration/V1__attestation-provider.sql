@@ -11,7 +11,7 @@ CREATE TABLE nft_settings
 (
     id             BIGSERIAL PRIMARY KEY,
     ap_id          BIGINT    NOT NULL REFERENCES attestation_provider (id),
-    type           INTEGER   NOT NULL,
+    type           INTEGER   NOT NULL UNIQUE,
     perpetuity     BOOL      NOT NULL,
     price          INTEGER   NOT NULL,
     expiration     TIMESTAMP NOT NULL,

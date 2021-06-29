@@ -34,7 +34,8 @@ class AttestationDataRequestListener(
                 .setHashedData(record.hashedData)
                 .build()
             )
-            .setSignedMessage(record.signedData)
+            .setNftType(record.nftType)
+            .setSignedMessage(record.signedMessage)
             .build()
         }
       }
