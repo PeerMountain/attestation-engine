@@ -25,7 +25,8 @@ class NftSettingsService(
                 request.nftSettings.perpetuity,
                 request.nftSettings.price,
                 LocalDateTime.ofInstant(Instant.ofEpochSecond(request.nftSettings.expiration), ZoneId.of("UTC")),
-                request.nftSettings.signedMessage
+                request.nftSettings.signedMessage,
+                true
             ))
           }
 
@@ -46,4 +47,7 @@ class NftSettingsService(
                 .addAllNftSettingsList(it)
                 .build()
           }
+
+    fun changeNftStatus(dto: AttestationProviderOuterClass.ChangeNftSettingsStatusRequest): Boolean =
+        nftRepository.updateStatusById(dto) == 1
 }

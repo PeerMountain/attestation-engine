@@ -1,5 +1,6 @@
 package com.kyc3.oracle.repository
 
+import com.kyc3.oracle.attestation.AttestationProviderOuterClass
 import com.kyc3.oracle.model.EnrichedNftSettings
 import com.kyc3.oracle.types.Tables
 import com.kyc3.oracle.types.tables.records.NftSettingsRecord
@@ -51,13 +52,23 @@ class NftSettingsRepository(
       .on(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
       .fetch {
         EnrichedNftSettings(
+          id = it.get(Tables.NFT_SETTINGS.ID),
           apAddress = it.get(Tables.ATTESTATION_PROVIDER.ADDRESS),
           type = it.get(Tables.NFT_SETTINGS.TYPE),
           perpetuity = it.get(Tables.NFT_SETTINGS.PERPETUITY),
           expiration = it.get(Tables.NFT_SETTINGS.EXPIRATION).toInstant(ZoneOffset.UTC).epochSecond,
           price = it.get(Tables.NFT_SETTINGS.PRICE),
           signedMessage = it.get(Tables.NFT_SETTINGS.SIGNED_MESSAGE),
+          status = it.get(Tables.NFT_SETTINGS.STATUS),
         )
       }
 
+  fun updateStatusById(dto: AttestationProviderOuterClass.ChangeNftSettingsStatusRequest): Int =
+    dsl.update(Tables.NFT_SETTINGS)
+      .set(Tables.NFT_SETTINGS.STATUS, dto.activate)
+      .from(Tables.ATTESTATION_PROVIDER)
+      .where(Tables.NFT_SETTINGS.ID.eq(dto.nftId))
+      .and(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
+      .and(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(dto.apAddress))
+      .execute()
 }

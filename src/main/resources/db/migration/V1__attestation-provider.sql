@@ -15,5 +15,6 @@ CREATE TABLE nft_settings
     perpetuity     BOOL      NOT NULL,
     price          INTEGER   NOT NULL,
     expiration     TIMESTAMP NOT NULL,
-    signed_message TEXT      NOT NULL
+    signed_message TEXT      NOT NULL,
+    status         BOOL      NOT NULL DEFAULT TRUE
 );
