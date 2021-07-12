@@ -38,7 +38,7 @@ class NftSettingsRepository(
       .where(Tables.NFT_SETTINGS.TYPE.eq(nftType))
       .fetchOne()
 
-  fun findAll(): List<EnrichedNftSettings> =
+  fun findAll(request: AttestationProviderOuterClass.ListNftRequest): List<EnrichedNftSettings> =
     dsl.select(
       Tables.NFT_SETTINGS.ID,
       Tables.ATTESTATION_PROVIDER.ADDRESS,
@@ -52,6 +52,12 @@ class NftSettingsRepository(
       .from(Tables.NFT_SETTINGS)
       .join(Tables.ATTESTATION_PROVIDER)
       .on(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
+      .let { condition ->
+        request.apAddress?.let {
+          condition.where(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(it))
+        }
+          ?: condition
+      }
       .fetch {
         EnrichedNftSettings(
           id = it.get(Tables.NFT_SETTINGS.ID),
