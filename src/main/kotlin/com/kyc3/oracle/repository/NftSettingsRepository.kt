@@ -53,9 +53,11 @@ class NftSettingsRepository(
       .join(Tables.ATTESTATION_PROVIDER)
       .on(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
       .let { condition ->
-        request.apAddress?.let {
-          condition.where(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(it))
-        }
+        request.apAddress
+          .takeIf { it.isNotBlank() }
+          ?.let {
+            condition.where(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(it))
+          }
           ?: condition
       }
       .fetch {
