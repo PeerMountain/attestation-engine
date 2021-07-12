@@ -40,12 +40,14 @@ class NftSettingsRepository(
 
   fun findAll(): List<EnrichedNftSettings> =
     dsl.select(
+      Tables.NFT_SETTINGS.ID,
       Tables.ATTESTATION_PROVIDER.ADDRESS,
       Tables.NFT_SETTINGS.TYPE,
       Tables.NFT_SETTINGS.PERPETUITY,
       Tables.NFT_SETTINGS.EXPIRATION,
       Tables.NFT_SETTINGS.PRICE,
-      Tables.NFT_SETTINGS.SIGNED_MESSAGE
+      Tables.NFT_SETTINGS.SIGNED_MESSAGE,
+      Tables.NFT_SETTINGS.STATUS
     )
       .from(Tables.NFT_SETTINGS)
       .join(Tables.ATTESTATION_PROVIDER)
