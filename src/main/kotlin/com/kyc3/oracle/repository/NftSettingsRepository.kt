@@ -1,6 +1,7 @@
 package com.kyc3.oracle.repository
 
-import com.kyc3.oracle.attestation.AttestationProviderOuterClass
+import com.kyc3.oracle.ap.ChangeNftStatus
+import com.kyc3.oracle.ap.ListNft
 import com.kyc3.oracle.model.EnrichedNftSettings
 import com.kyc3.oracle.types.Tables
 import com.kyc3.oracle.types.tables.records.NftSettingsRecord
@@ -38,7 +39,7 @@ class NftSettingsRepository(
       .where(Tables.NFT_SETTINGS.TYPE.eq(nftType))
       .fetchOne()
 
-  fun findAll(request: AttestationProviderOuterClass.ListNftRequest): List<EnrichedNftSettings> =
+  fun findAll(request: ListNft.ListNftRequest): List<EnrichedNftSettings> =
     dsl.select(
       Tables.NFT_SETTINGS.ID,
       Tables.ATTESTATION_PROVIDER.ADDRESS,
@@ -73,7 +74,7 @@ class NftSettingsRepository(
         )
       }
 
-  fun updateStatusById(dto: AttestationProviderOuterClass.ChangeNftSettingsStatusRequest): Int =
+  fun updateStatusById(dto: ChangeNftStatus.ChangeNftSettingsStatusRequest): Int =
     dsl.update(Tables.NFT_SETTINGS)
       .set(Tables.NFT_SETTINGS.STATUS, dto.activate)
       .from(Tables.ATTESTATION_PROVIDER)

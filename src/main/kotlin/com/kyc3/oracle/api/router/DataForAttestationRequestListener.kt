@@ -1,27 +1,27 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
-import com.kyc3.oracle.api.OracleAPIResponse
-import com.kyc3.oracle.attestation.AttestationProviderOuterClass
+import com.kyc3.oracle.attestation.AttestationDataOuterClass
+import com.kyc3.oracle.ap.RequestAttestationData
 import com.kyc3.oracle.service.AttestationDataService
 import org.jivesoftware.smack.chat2.Chat
 import org.springframework.stereotype.Component
 
 @Component
 class DataForAttestationRequestListener(
-  private val oracleAPIResponse: OracleAPIResponse,
   private val attestationDataService: AttestationDataService
-) : OracleListener<AttestationProviderOuterClass.DataForAttestationRequest> {
+) :
+  OracleListener<RequestAttestationData.DataForAttestationRequest, RequestAttestationData.DataForAttestationResponse> {
 
-  override fun type(): Class<AttestationProviderOuterClass.DataForAttestationRequest> =
-    AttestationProviderOuterClass.DataForAttestationRequest::class.java
+  override fun type(): Class<RequestAttestationData.DataForAttestationRequest> =
+    RequestAttestationData.DataForAttestationRequest::class.java
 
-  override fun accept(event: Any, chat: Chat) {
+  override fun accept(event: Any, chat: Chat): RequestAttestationData.DataForAttestationResponse =
     event.unpack(type())
       .let { attestationDataService.findDataForAttestation(it.apAddress) }
       .let { list ->
         list.map {
-          AttestationProviderOuterClass.AttestationData.newBuilder()
+          AttestationDataOuterClass.AttestationData.newBuilder()
             .setId(it.id)
             .setCustomerAddress(it.customerAddress)
             .setData(it.data)
@@ -32,12 +32,8 @@ class DataForAttestationRequestListener(
         }
       }
       .let {
-        oracleAPIResponse.responseToClient(
-          chat,
-          AttestationProviderOuterClass.DataForAttestationResponse.newBuilder()
-            .addAllList(it)
-            .build()
-        )
+        RequestAttestationData.DataForAttestationResponse.newBuilder()
+          .addAllList(it)
+          .build()
       }
-  }
 }
