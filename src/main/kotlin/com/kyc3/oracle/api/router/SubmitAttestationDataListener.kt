@@ -1,23 +1,22 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
-import com.kyc3.oracle.api.OracleAPIResponse
-import com.kyc3.oracle.attestation.AttestationProviderOuterClass
+import com.kyc3.oracle.ap.SignAttestation
 import com.kyc3.oracle.model.AttestationDataDto
 import com.kyc3.oracle.service.AttestationDataService
+import com.kyc3.oracle.user.SubmitAttestation
 import org.jivesoftware.smack.chat2.Chat
 import org.springframework.stereotype.Service
 
 @Service
 class SubmitAttestationDataListener(
-  private val oracleAPIResponse: OracleAPIResponse,
   private val attestationDataService: AttestationDataService
 ) :
-  OracleListener<AttestationProviderOuterClass.SubmitAttestationData> {
-  override fun type(): Class<AttestationProviderOuterClass.SubmitAttestationData> =
-    AttestationProviderOuterClass.SubmitAttestationData::class.java
+  OracleListener<SubmitAttestation.SubmitAttestationDataRequest, SignAttestation.SignAttestationDataResponse> {
+  override fun type(): Class<SubmitAttestation.SubmitAttestationDataRequest> =
+    SubmitAttestation.SubmitAttestationDataRequest::class.java
 
-  override fun accept(event: Any, chat: Chat) {
+  override fun accept(event: Any, chat: Chat): SignAttestation.SignAttestationDataResponse =
     event.unpack(type())
       .let {
         attestationDataService.submitAttestationData(
@@ -31,5 +30,5 @@ class SubmitAttestationDataListener(
           )
         )
       }
-  }
+      .let { SignAttestation.SignAttestationDataResponse.newBuilder().build() }
 }

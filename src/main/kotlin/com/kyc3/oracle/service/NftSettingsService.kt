@@ -1,6 +1,9 @@
 package com.kyc3.oracle.service
 
-import com.kyc3.oracle.attestation.AttestationProviderOuterClass
+import com.kyc3.oracle.ap.ChangeNftStatus
+import com.kyc3.oracle.ap.CreateNft
+import com.kyc3.oracle.ap.ListNft
+import com.kyc3.oracle.nft.Nft
 import com.kyc3.oracle.repository.AttestationProviderRepository
 import com.kyc3.oracle.repository.NftSettingsRepository
 import com.kyc3.oracle.types.tables.records.NftSettingsRecord
@@ -15,7 +18,7 @@ class NftSettingsService(
   private val nftRepository: NftSettingsRepository
 ) {
 
-  fun createNft(request: AttestationProviderOuterClass.CreateNftRequest): Int? =
+  fun createNft(request: CreateNft.CreateNftRequest): Int? =
     attestationProviderRepository.findByAddress(request.nftSettings.address)
       ?.let {
         nftRepository.createNft(
@@ -32,10 +35,10 @@ class NftSettingsService(
         )
       }
 
-  fun getAllNft(request: AttestationProviderOuterClass.ListNftRequest): AttestationProviderOuterClass.ListNftResponse =
+  fun getAllNft(request: ListNft.ListNftRequest): ListNft.ListNftResponse =
     nftRepository.findAll(request)
       .map {
-        AttestationProviderOuterClass.NftSettings.newBuilder()
+        Nft.NftSettings.newBuilder()
           .setId(it.id)
           .setAddress(it.apAddress)
           .setPerpetuity(it.perpetuity)
@@ -47,11 +50,11 @@ class NftSettingsService(
           .build()
       }
       .let {
-        AttestationProviderOuterClass.ListNftResponse.newBuilder()
+        ListNft.ListNftResponse.newBuilder()
           .addAllNftSettingsList(it)
           .build()
       }
 
-  fun changeNftStatus(dto: AttestationProviderOuterClass.ChangeNftSettingsStatusRequest): Boolean =
+  fun changeNftStatus(dto: ChangeNftStatus.ChangeNftSettingsStatusRequest): Boolean =
     nftRepository.updateStatusById(dto) == 1
 }

@@ -8,9 +8,10 @@ import javax.annotation.PostConstruct
 
 @Service
 class OracleAPIListener(
-    private val chatManager: ChatManager,
-    private val oracleRouter: OracleRouter,
-    private val messageParser: MessageParser
+  private val chatManager: ChatManager,
+  private val oracleRouter: OracleRouter,
+  private val messageParser: MessageParser,
+  private val oracleAPIResponse: OracleAPIResponse
 ) {
 
   private val log = LoggerFactory.getLogger(javaClass)
@@ -18,9 +19,10 @@ class OracleAPIListener(
   @PostConstruct
   fun listenToOracle() {
     chatManager.addIncomingListener { from, message, chat ->
-      log.info("process='OracleAPIListener' from='${from.asUnescapedString()}' message='received an event'")
+      log.info("process='OracleAPIListener.listenToOracle' from='${from.asUnescapedString()}' message='received an event'")
       messageParser.parseMessage(message)
-          .let { oracleRouter.route(it, chat) }
+        .let { oracleRouter.route(it, chat) }
+        ?.let { oracleAPIResponse.responseToClient(chat, it) }
     }
   }
 }
