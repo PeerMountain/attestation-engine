@@ -21,7 +21,7 @@ services:
     volumes:
       - postgres:/data/ap_postgres
     ports:
-      - "5433:5432"
+      - "5434:5432"
 
 volumes:
   postgres:
