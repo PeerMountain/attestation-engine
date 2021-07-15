@@ -12,5 +12,16 @@ services:
     ports:
       - "5432:5432"
 
+  ap_postgres:
+    container_name: ap_postgres_container
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-tap}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tap}
+    volumes:
+      - postgres:/data/ap_postgres
+    ports:
+      - "5433:5432"
+
 volumes:
   postgres:
