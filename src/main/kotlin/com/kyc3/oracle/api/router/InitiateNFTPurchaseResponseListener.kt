@@ -20,8 +20,8 @@ class InitiateNFTPurchaseResponseListener(
       .let {
         oracleFrontService.sendToFrontend(
           InitiateNftPurchase.InitiateNFTPurchaseResponse.newBuilder()
-            .setUserAddress(/*TODO*/ "address")
-            .setNftType(/*TODO*/1)
+            .setUserAddress(it.userAddress)
+            .setNftType(it.nftType)
             .setChallenge(it.challenge.data)
             .build()
         )
