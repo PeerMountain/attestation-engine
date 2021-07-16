@@ -7,5 +7,5 @@ import org.jivesoftware.smack.chat2.Chat
 interface OracleListener<Request : GeneratedMessageV3, Response: GeneratedMessageV3> {
   fun type(): Class<Request>
 
-  fun accept(event: Any, chat: Chat) : Response
+  fun accept(event: Any, chat: Chat) : Response?
 }
