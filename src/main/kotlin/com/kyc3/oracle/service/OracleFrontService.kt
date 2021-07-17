@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component
 @Component
 class OracleFrontService(
   private val oracleAPIResponse: OracleAPIResponse,
-  private val chatManager: ChatManager
+  chatManager: ChatManager
 ) {
 
-  private val jid: EntityBareJid = JidCreate.entityBareFrom("timestamp-ap@jabber.hot-chilli.net")
+  private val jid: EntityBareJid = JidCreate.entityBareFrom("oracle-fe@jabber.hot-chilli.net")
   private val chat: Chat = chatManager.chatWith(jid)
 
   fun sendToFrontend(message: GeneratedMessageV3) =
