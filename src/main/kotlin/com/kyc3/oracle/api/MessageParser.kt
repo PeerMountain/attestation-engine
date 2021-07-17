@@ -7,6 +7,6 @@ import org.jivesoftware.smack.packet.Message
 class MessageParser {
 
   fun parseMessage(message: Message): ByteArray =
-      message.body.split(",").map { it.toUByte().toByte() }.toByteArray()
+      message.body.split(",").map { it.toByte() }.toByteArray()
 
 }

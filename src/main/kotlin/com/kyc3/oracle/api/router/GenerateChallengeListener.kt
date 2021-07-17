@@ -8,7 +8,7 @@ import org.jivesoftware.smack.chat2.Chat
 import org.springframework.stereotype.Component
 
 @Component
-class InitiateNFTPurchaseResponseListener(
+class GenerateChallengeListener(
   private val oracleFrontService: OracleFrontService
 ) :
   OracleListener<GenerateChallenge.GenerateChallengeResponse, InitiateNftPurchase.InitiateNFTPurchaseResponse> {
