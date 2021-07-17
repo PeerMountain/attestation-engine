@@ -1,5 +1,6 @@
 package com.kyc3.oracle.service
 
+import com.google.protobuf.GeneratedMessageV3
 import com.kyc3.ap.challenge.GenerateChallenge
 import com.kyc3.oracle.api.OracleAPIResponse
 import org.jivesoftware.smack.chat2.Chat
@@ -23,4 +24,7 @@ class TimestampAPService(
         .setUserAddress(userAddress)
         .build()
     )
+
+  fun sendToProvider(message: GeneratedMessageV3): Unit =
+    oracleAPIResponse.responseToClient(chat, message)
 }
