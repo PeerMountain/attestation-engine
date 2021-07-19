@@ -14,7 +14,9 @@ class OracleAPIResponse {
       .setType("type")
       .setMessage(Any.pack(message))
       .build()
-      .toByteArray().joinToString(",")
+      .toByteArray()
+      .map { it.toUByte() }
+      .joinToString(",")
       .let { chat.send(it) }
 
 }
