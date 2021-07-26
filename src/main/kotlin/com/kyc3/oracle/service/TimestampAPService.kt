@@ -18,10 +18,11 @@ class TimestampAPService(
   private val jid: EntityBareJid = JidCreate.entityBareFrom("timestamp-ap@jabber.hot-chilli.net")
   private val chat: Chat = chatManager.chatWith(jid)
 
-  fun generateChallenge(userAddress: String): Unit =
+  fun generateChallenge(userAddress: String, nftType: Int): Unit =
     oracleAPIResponse.responseToClient(
       chat, GenerateChallenge.GenerateChallengeRequest.newBuilder()
         .setUserAddress(userAddress)
+        .setNftType(nftType)
         .build()
     )
 
