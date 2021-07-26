@@ -15,7 +15,9 @@ class InitiateNFTPurchaseListener(
     InitiateNftPurchase.InitiateNFTPurchaseRequest::class.java
 
   override fun accept(event: Any, chat: Chat): Any? {
-    timestampAPService.generateChallenge(event.unpack(type()).userAddress)
+    event.unpack(type()).let {
+      timestampAPService.generateChallenge(it.userAddress, it.nftType)
+    }
     return null
   }
 }
