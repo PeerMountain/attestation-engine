@@ -5,9 +5,12 @@ import com.google.protobuf.GeneratedMessageV3
 import com.kyc3.MessageOuterClass
 import org.jivesoftware.smack.chat2.Chat
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
-class OracleAPIResponse {
+class OracleAPIResponse(
+  private val base64Encoder: Base64.Encoder
+){
 
   fun responseToClient(chat: Chat, message: GeneratedMessageV3) =
     MessageOuterClass.Message.newBuilder()
@@ -15,8 +18,7 @@ class OracleAPIResponse {
       .setMessage(Any.pack(message))
       .build()
       .toByteArray()
-      .map { it.toUByte() }
-      .joinToString(",")
+      .let { base64Encoder.encodeToString(it) }
       .let { chat.send(it) }
 
 }

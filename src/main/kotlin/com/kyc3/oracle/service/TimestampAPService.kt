@@ -15,7 +15,7 @@ class TimestampAPService(
   private val chatManager: ChatManager
 ) {
 
-  private val jid: EntityBareJid = JidCreate.entityBareFrom("timestamp-ap@jabber.hot-chilli.net")
+  private val jid: EntityBareJid = JidCreate.entityBareFrom("timestamp-ap-local@jabber.hot-chilli.net")
   private val chat: Chat = chatManager.chatWith(jid)
 
   fun generateChallenge(userAddress: String, nftType: Int): Unit =
