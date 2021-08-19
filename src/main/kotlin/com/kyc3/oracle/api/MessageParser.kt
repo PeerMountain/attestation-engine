@@ -1,12 +1,15 @@
 package com.kyc3.oracle.api
 
-import org.springframework.stereotype.Service
 import org.jivesoftware.smack.packet.Message
+import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
-class MessageParser {
+class MessageParser(
+  private val base64Decoder: Base64.Decoder
+) {
 
   fun parseMessage(message: Message): ByteArray =
-      message.body.split(",").map { it.toUByte().toByte() }.toByteArray()
+    base64Decoder.decode(message.body)
 
 }

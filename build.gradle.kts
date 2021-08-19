@@ -47,6 +47,8 @@ dependencies {
   implementation("org.igniterealtime.smack:smack-extensions:4.3.5")
   implementation("org.igniterealtime.smack:smack-java7:4.3.5")
 
+  implementation("commons-io:commons-io:2.8.0")
+
   implementation("org.web3j:core:5.0.0")
   implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
