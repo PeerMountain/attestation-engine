@@ -11,5 +11,8 @@ xmpp:
   password: ${XMPP_PASSWORD:oracle}
   host: ${XMPP_HOST:jabber.hot-chilli.net}
 
+wallet:
+  privateKey: ${ACCOUNT_PRIVATE_KEY:1bc74ffaff182d4581ea028ac6daab4e290e4b5dd8fc55dd1dfd6e3ebbe5b8f1}
+
 web3:
   host: ${WEB3_HOST:http://localhost:8545}
