@@ -1,6 +1,7 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
+import com.kyc3.Message
 import com.kyc3.oracle.ap.ChangeNftStatus
 import com.kyc3.oracle.service.NftSettingsService
 import org.jivesoftware.smack.chat2.Chat
@@ -18,8 +19,8 @@ class ChangeNftSettingsStatusListener(
   override fun type(): Class<ChangeNftStatus.ChangeNftSettingsStatusRequest> =
     ChangeNftStatus.ChangeNftSettingsStatusRequest::class.java
 
-  override fun accept(event: Any, chat: Chat): ChangeNftStatus.ChangeNftSettingsStatusResponse =
-    nftSettingsService.changeNftStatus(event.unpack(type()))
+  override fun accept(event: Message.SignedMessage, chat: Chat): ChangeNftStatus.ChangeNftSettingsStatusResponse =
+    nftSettingsService.changeNftStatus(event.message.unpack(type()))
       .takeIf { it }
       ?.let {
         ChangeNftStatus.ChangeNftSettingsStatusResponse.newBuilder()

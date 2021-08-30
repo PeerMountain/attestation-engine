@@ -17,10 +17,10 @@ class OracleRouter(
       listeners.find { listener -> message.message.`is`(listener.type()) }
         .also {
           if (it == null) {
-            log.warn("process='OracleAPIListener.listenToOracle' message='Type can't be processed'")
+            log.warn("process='OracleRouter.route' message='Type can't be processed'")
           }
         }
-        ?.accept(message.message, chat)
+        ?.accept(message, chat)
     } catch (ex: RuntimeException) {
       log.warn("Exception during message processing", ex)
       null

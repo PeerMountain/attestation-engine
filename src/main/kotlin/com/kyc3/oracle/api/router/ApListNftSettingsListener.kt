@@ -1,6 +1,7 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
+import com.kyc3.Message
 import com.kyc3.oracle.ap.ListNft
 import com.kyc3.oracle.service.NftSettingsService
 import org.jivesoftware.smack.chat2.Chat
@@ -13,6 +14,6 @@ class ApListNftSettingsListener(
   override fun type(): Class<ListNft.ListNftRequest> =
     ListNft.ListNftRequest::class.java
 
-  override fun accept(event: Any, chat: Chat): ListNft.ListNftResponse =
-    nftSettingsService.getAllNft(event.unpack(type()))
+  override fun accept(event: Message.SignedMessage, chat: Chat): ListNft.ListNftResponse =
+    nftSettingsService.getAllNft(event.message.unpack(type()))
 }

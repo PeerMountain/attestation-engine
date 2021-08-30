@@ -1,6 +1,7 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
+import com.kyc3.Message
 import com.kyc3.oracle.ap.AttestationProviderOuterClass
 import com.kyc3.oracle.api.OracleAPIResponse
 import com.kyc3.oracle.service.AttestationProviderService
@@ -15,7 +16,7 @@ class AttestationProviderListListener(
   override fun type(): Class<ApList.AttestationProviderListRequest> =
     ApList.AttestationProviderListRequest::class.java
 
-  override fun accept(event: Any, chat: Chat): ApList.AttestationProviderListResponse =
+  override fun accept(event: Message.SignedMessage, chat: Chat): ApList.AttestationProviderListResponse =
     attestationProviderService.findConfirmedProviders()
       .map {
         AttestationProviderOuterClass.AttestationProvider.newBuilder()

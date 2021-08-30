@@ -1,6 +1,7 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
+import com.kyc3.Message
 import com.kyc3.ap.challenge.VerifyChallenge
 import com.kyc3.oracle.service.TimestampAPService
 import com.kyc3.oracle.user.ChallengeSigned
@@ -15,13 +16,14 @@ class ChallengeSignedListener(
   override fun type(): Class<ChallengeSigned.ChallengeSignedRequest> =
     ChallengeSigned.ChallengeSignedRequest::class.java
 
-  override fun accept(event: Any, chat: Chat): ChallengeSigned.ChallengeSignedResponse? {
-    event.unpack(type())
+  override fun accept(event: Message.SignedMessage, chat: Chat): ChallengeSigned.ChallengeSignedResponse? {
+    event.message.unpack(type())
       .let {
         VerifyChallenge.VerifyChallengeRequest.newBuilder()
           .setChallenge(it.challenge)
           .setSignedChallenge(it.signedChallenge)
           .setUserAddress(it.userAddress)
+          .setUserPublicKey(event.publicKey)
           .build()
       }
       .let { timestampAPService.sendToProvider(it) }

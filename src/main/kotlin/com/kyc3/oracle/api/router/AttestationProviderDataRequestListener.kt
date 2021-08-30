@@ -1,6 +1,7 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
+import com.kyc3.Message
 import com.kyc3.oracle.ap.AttestationProviderOuterClass
 import com.kyc3.oracle.ap.Data
 import com.kyc3.oracle.api.OracleAPIResponse
@@ -21,8 +22,8 @@ class AttestationProviderDataRequestListener(
   override fun type(): Class<Data.AttestationProviderDataRequest> =
     Data.AttestationProviderDataRequest::class.java
 
-  override fun accept(event: Any, chat: Chat): Data.AttestationProviderDataResponse =
-    event.unpack(type()).address
+  override fun accept(event: Message.SignedMessage, chat: Chat): Data.AttestationProviderDataResponse =
+    event.message.unpack(type()).address
       .let { attestationProviderService.getProviderByAddress(it) }
       ?.let {
         Data.AttestationProviderDataResponse.newBuilder()

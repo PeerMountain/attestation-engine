@@ -1,7 +1,5 @@
-package com.kyc3.oracle.api
+package com.kyc3.oracle.api.flow
 
-import com.google.protobuf.GeneratedMessageV3
-import com.google.protobuf.MessageOrBuilder
 import com.kyc3.ErrorDtoOuterClass
 import com.kyc3.Message
 import com.kyc3.oracle.service.Web3Service
@@ -19,12 +17,19 @@ class SignatureVerificationService(
     message: Message.SignedMessage
   ): ErrorDtoOuterClass.ErrorDto? =
     if (!validSignature(message)) {
-      ErrorDtoOuterClass.ErrorDto.newBuilder()
-        .setMessage("Invalid message signature")
-        .build()
+      if (messageIsError(message)) {
+        null
+      } else {
+        ErrorDtoOuterClass.ErrorDto.newBuilder()
+          .setMessage("Invalid message signature")
+          .build()
+      }
     } else {
       null
     }
+
+  private fun messageIsError(message: Message.SignedMessage) =
+    message.message.`is`(ErrorDtoOuterClass.ErrorDto::class.java)
 
   private fun validSignature(message: Message.SignedMessage) = web3Service.verifySignature(
     encoder.encodeToString(message.message.toByteArray()),
