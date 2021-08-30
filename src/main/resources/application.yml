@@ -16,3 +16,6 @@ wallet:
 
 web3:
   host: ${WEB3_HOST:http://localhost:8545}
+
+libsodium:
+  path: /usr/lib/libsodium.so

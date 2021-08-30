@@ -1,6 +1,7 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
+import com.kyc3.Message
 import com.kyc3.oracle.ap.CreateNft
 import com.kyc3.oracle.service.NftSettingsService
 import org.jivesoftware.smack.chat2.Chat
@@ -13,7 +14,7 @@ class CreateNftSettingsListener(
   override fun type(): Class<CreateNft.CreateNftRequest> =
     CreateNft.CreateNftRequest::class.java
 
-  override fun accept(event: Any, chat: Chat): CreateNft.CreateNftResponse =
-    nftService.createNft(event.unpack(type()))
+  override fun accept(event: Message.SignedMessage, chat: Chat): CreateNft.CreateNftResponse =
+    nftService.createNft(event.message.unpack(type()))
       .let { CreateNft.CreateNftResponse.getDefaultInstance() }
 }

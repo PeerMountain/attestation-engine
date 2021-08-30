@@ -17,6 +17,6 @@ class OracleFrontService(
   private val jid: EntityBareJid = JidCreate.entityBareFrom("oracle-fe@jabber.hot-chilli.net")
   private val chat: Chat = chatManager.chatWith(jid)
 
-  fun sendToFrontend(message: GeneratedMessageV3) =
-    oracleAPIResponse.responseToClient(chat, message)
+  fun sendToFrontend(publicKey: String, message: GeneratedMessageV3) =
+    oracleAPIResponse.responseToClient(publicKey, chat, message)
 }

@@ -1,6 +1,7 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
+import com.kyc3.Message
 import com.kyc3.ap.challenge.GenerateChallenge
 import com.kyc3.oracle.service.OracleFrontService
 import com.kyc3.oracle.user.InitiateNftPurchase
@@ -15,10 +16,11 @@ class GenerateChallengeListener(
   override fun type(): Class<GenerateChallenge.GenerateChallengeResponse> =
     GenerateChallenge.GenerateChallengeResponse::class.java
 
-  override fun accept(event: Any, chat: Chat): InitiateNftPurchase.InitiateNFTPurchaseResponse? {
-    event.unpack(type())
+  override fun accept(event: Message.SignedMessage, chat: Chat): InitiateNftPurchase.InitiateNFTPurchaseResponse? {
+    event.message.unpack(type())
       .let {
         oracleFrontService.sendToFrontend(
+          it.userPublicKey,
           InitiateNftPurchase.InitiateNFTPurchaseResponse.newBuilder()
             .setUserAddress(it.userAddress)
             .setNftType(it.nftType)

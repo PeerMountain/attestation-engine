@@ -1,6 +1,7 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
+import com.kyc3.Message
 import com.kyc3.oracle.ap.SignAttestation
 import com.kyc3.oracle.model.AttestationDataDto
 import com.kyc3.oracle.service.AttestationDataService
@@ -16,8 +17,8 @@ class SubmitAttestationDataListener(
   override fun type(): Class<SubmitAttestation.SubmitAttestationDataRequest> =
     SubmitAttestation.SubmitAttestationDataRequest::class.java
 
-  override fun accept(event: Any, chat: Chat): SignAttestation.SignAttestationDataResponse =
-    event.unpack(type())
+  override fun accept(event: Message.SignedMessage, chat: Chat): SignAttestation.SignAttestationDataResponse =
+    event.message.unpack(type())
       .let {
         attestationDataService.submitAttestationData(
           AttestationDataDto(

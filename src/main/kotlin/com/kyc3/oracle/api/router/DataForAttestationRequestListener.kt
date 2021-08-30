@@ -1,6 +1,7 @@
 package com.kyc3.oracle.api.router
 
 import com.google.protobuf.Any
+import com.kyc3.Message
 import com.kyc3.oracle.attestation.AttestationDataOuterClass
 import com.kyc3.oracle.ap.RequestAttestationData
 import com.kyc3.oracle.service.AttestationDataService
@@ -16,8 +17,8 @@ class DataForAttestationRequestListener(
   override fun type(): Class<RequestAttestationData.DataForAttestationRequest> =
     RequestAttestationData.DataForAttestationRequest::class.java
 
-  override fun accept(event: Any, chat: Chat): RequestAttestationData.DataForAttestationResponse =
-    event.unpack(type())
+  override fun accept(event: Message.SignedMessage, chat: Chat): RequestAttestationData.DataForAttestationResponse =
+    event.message.unpack(type())
       .let { attestationDataService.findDataForAttestation(it.apAddress) }
       .let { list ->
         list.map {
