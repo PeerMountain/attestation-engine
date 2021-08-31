@@ -22,7 +22,7 @@ class TimestampAPService(
   private val exchangeKeysHolder: ExchangeKeysHolder
 ) {
 
-  private val jid: EntityBareJid = JidCreate.entityBareFrom("timestamp-ap-local@jabber.hot-chilli.net")
+  private val jid: EntityBareJid = JidCreate.entityBareFrom("timestamp-ap@jabber.hot-chilli.net")
   private val chat: Chat = chatManager.chatWith(jid)
   private val log = LoggerFactory.getLogger(javaClass)
 
@@ -46,7 +46,7 @@ class TimestampAPService(
     )
 
   fun sendToProvider(message: GeneratedMessageV3): Unit =
-    userKeysService.getUserKeys("timestamp-ap-local@jabber.hot-chilli.net")
+    userKeysService.getUserKeys("timestamp-ap@jabber.hot-chilli.net")
       ?.let {
         oracleAPIResponse.responseToClient(it.publicEncryptionKey, chat, message)
       }

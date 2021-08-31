@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service
 @Service
 class AttestationDataService(
   private val attestationDataRepository: AttestationDataRepository,
-  private val attestationProviderRepository: AttestationProviderRepository,
   private val nftSettingsRepository: NftSettingsRepository
 ) {
 
