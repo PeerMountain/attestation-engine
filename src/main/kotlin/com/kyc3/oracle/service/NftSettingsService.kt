@@ -14,47 +14,47 @@ import java.time.ZoneId
 
 @Service
 class NftSettingsService(
-  private val attestationProviderRepository: AttestationProviderRepository,
-  private val nftRepository: NftSettingsRepository
+    private val attestationProviderRepository: AttestationProviderRepository,
+    private val nftRepository: NftSettingsRepository
 ) {
 
-  fun createNft(request: CreateNft.CreateNftRequest): Int? =
-    attestationProviderRepository.findByAddress(request.nftSettings.address)
-      ?.let {
-        nftRepository.createNft(
-          NftSettingsRecord(
-            null,
-            it.id,
-            request.nftSettings.type,
-            request.nftSettings.perpetuity,
-            request.nftSettings.price,
-            LocalDateTime.ofInstant(Instant.ofEpochSecond(request.nftSettings.expiration), ZoneId.of("UTC")),
-            request.nftSettings.signedMessage,
-            true
-          )
-        )
-      }
+    fun createNft(request: CreateNft.CreateNftRequest): Int? =
+        attestationProviderRepository.findByAddress(request.nftSettings.address)
+            ?.let {
+                nftRepository.createNft(
+                    NftSettingsRecord(
+                        null,
+                        it.id,
+                        request.nftSettings.type,
+                        request.nftSettings.perpetuity,
+                        request.nftSettings.price,
+                        LocalDateTime.ofInstant(Instant.ofEpochSecond(request.nftSettings.expiration), ZoneId.of("UTC")),
+                        request.nftSettings.signedMessage,
+                        true
+                    )
+                )
+            }
 
-  fun getAllNft(request: ListNft.ListNftRequest): ListNft.ListNftResponse =
-    nftRepository.findAll(request)
-      .map {
-        Nft.NftSettings.newBuilder()
-          .setId(it.id)
-          .setAddress(it.apAddress)
-          .setPerpetuity(it.perpetuity)
-          .setPrice(it.price)
-          .setSignedMessage(it.signedMessage)
-          .setType(it.type)
-          .setExpiration(it.expiration)
-          .setStatus(it.status)
-          .build()
-      }
-      .let {
-        ListNft.ListNftResponse.newBuilder()
-          .addAllNftSettingsList(it)
-          .build()
-      }
+    fun getAllNft(request: ListNft.ListNftRequest): ListNft.ListNftResponse =
+        nftRepository.findAll(request)
+            .map {
+                Nft.NftSettings.newBuilder()
+                    .setId(it.id)
+                    .setAddress(it.apAddress)
+                    .setPerpetuity(it.perpetuity)
+                    .setPrice(it.price)
+                    .setSignedMessage(it.signedMessage)
+                    .setType(it.type)
+                    .setExpiration(it.expiration)
+                    .setStatus(it.status)
+                    .build()
+            }
+            .let {
+                ListNft.ListNftResponse.newBuilder()
+                    .addAllNftSettingsList(it)
+                    .build()
+            }
 
-  fun changeNftStatus(dto: ChangeNftStatus.ChangeNftSettingsStatusRequest): Boolean =
-    nftRepository.updateStatusById(dto) == 1
+    fun changeNftStatus(dto: ChangeNftStatus.ChangeNftSettingsStatusRequest): Boolean =
+        nftRepository.updateStatusById(dto) == 1
 }

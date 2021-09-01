@@ -7,26 +7,26 @@ import com.muquit.libsodiumjna.SodiumLibrary
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.web3j.utils.Numeric
-import java.util.*
+import java.util.Base64
 
 @Configuration
 class LibsodiumConfiguration(
-  libsodiumProperties: LibsodiumProperties,
-  private val walletProperties: WalletProperties,
-  private val base64Encoder: Base64.Encoder
+    libsodiumProperties: LibsodiumProperties,
+    private val walletProperties: WalletProperties,
+    private val base64Encoder: Base64.Encoder
 ) {
 
-  init {
-    SodiumLibrary.setLibraryPath(libsodiumProperties.path)
-  }
+    init {
+        SodiumLibrary.setLibraryPath(libsodiumProperties.path)
+    }
 
-  @Bean
-  fun libsodiumPublicKey() =
-    LibsodiumPublicKey(
-      base64Encoder.encodeToString(
-        SodiumLibrary.cryptoPublicKey(
-          Numeric.hexStringToByteArray(walletProperties.privateKey)
+    @Bean
+    fun libsodiumPublicKey() =
+        LibsodiumPublicKey(
+            base64Encoder.encodeToString(
+                SodiumLibrary.cryptoPublicKey(
+                    Numeric.hexStringToByteArray(walletProperties.privateKey)
+                )
+            )
         )
-      )
-    )
 }

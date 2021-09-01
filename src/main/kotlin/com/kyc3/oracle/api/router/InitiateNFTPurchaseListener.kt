@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class InitiateNFTPurchaseListener(
-  private val timestampAPService: TimestampAPService
+    private val timestampAPService: TimestampAPService
 ) :
-  OracleListener<InitiateNftPurchase.InitiateNFTPurchaseRequest, Any> {
-  override fun type(): Class<InitiateNftPurchase.InitiateNFTPurchaseRequest> =
-    InitiateNftPurchase.InitiateNFTPurchaseRequest::class.java
+    OracleListener<InitiateNftPurchase.InitiateNFTPurchaseRequest, Any> {
+    override fun type(): Class<InitiateNftPurchase.InitiateNFTPurchaseRequest> =
+        InitiateNftPurchase.InitiateNFTPurchaseRequest::class.java
 
-  override fun accept(event: Message.SignedMessage, chat: Chat): Any? {
-    event.message.unpack(type()).let {
-      timestampAPService.generateChallenge(it.userAddress, event.publicKey, it.nftType)
+    override fun accept(event: Message.SignedMessage, chat: Chat): Any? {
+        event.message.unpack(type()).let {
+            timestampAPService.generateChallenge(it.userAddress, event.publicKey, it.nftType)
+        }
+        return null
     }
-    return null
-  }
 }

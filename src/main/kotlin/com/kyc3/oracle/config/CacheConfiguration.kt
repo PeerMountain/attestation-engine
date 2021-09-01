@@ -12,20 +12,20 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class CacheConfiguration {
 
-  @Bean
-  fun cacheManger(): CacheManager =
-    CacheManagerBuilder.newCacheManagerBuilder()
-      .build()
-      .also { it.init() }
+    @Bean
+    fun cacheManger(): CacheManager =
+        CacheManagerBuilder.newCacheManagerBuilder()
+            .build()
+            .also { it.init() }
 
-  @Bean
-  fun cache(cacheManager: CacheManager): Cache<String, UserKeys> =
-    cacheManager.createCache(
-      "PublicKeyCache",
-      CacheConfigurationBuilder.newCacheConfigurationBuilder(
-        String::class.java,
-        UserKeys::class.java,
-        ResourcePoolsBuilder.heap(10),
-      )
-    )
+    @Bean
+    fun cache(cacheManager: CacheManager): Cache<String, UserKeys> =
+        cacheManager.createCache(
+            "PublicKeyCache",
+            CacheConfigurationBuilder.newCacheConfigurationBuilder(
+                String::class.java,
+                UserKeys::class.java,
+                ResourcePoolsBuilder.heap(10),
+            )
+        )
 }

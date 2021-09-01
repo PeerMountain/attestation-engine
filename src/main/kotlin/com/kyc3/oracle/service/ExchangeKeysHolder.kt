@@ -10,26 +10,25 @@ import org.web3j.utils.Numeric
 
 @Component
 class ExchangeKeysHolder(
-  private val xmppProperties: XmppProperties,
-  private val credentials: Credentials,
-  private val ecKeyPair: ECKeyPair,
-  private val libsodiumPublicKey: LibsodiumPublicKey,
+    private val xmppProperties: XmppProperties,
+    private val credentials: Credentials,
+    private val ecKeyPair: ECKeyPair,
+    private val libsodiumPublicKey: LibsodiumPublicKey,
 ) {
 
-  fun generateExchangeMessageRequest(): Exchange.ExchangeKeysRequest =
-    Exchange.ExchangeKeysRequest.newBuilder()
-      .setUsername(xmppProperties.userName)
-      .setAddress(credentials.address)
-      .setPublicKey(Numeric.toHexStringNoPrefix(ecKeyPair.publicKey))
-      .setPublicEncryptionKey(libsodiumPublicKey.publicKey)
-      .build()
+    fun generateExchangeMessageRequest(): Exchange.ExchangeKeysRequest =
+        Exchange.ExchangeKeysRequest.newBuilder()
+            .setUsername(xmppProperties.userName)
+            .setAddress(credentials.address)
+            .setPublicKey(Numeric.toHexStringNoPrefix(ecKeyPair.publicKey))
+            .setPublicEncryptionKey(libsodiumPublicKey.publicKey)
+            .build()
 
-  fun generateExchangeMessageResponse(): Exchange.ExchangeKeysResponse =
-    Exchange.ExchangeKeysResponse.newBuilder()
-      .setUsername(xmppProperties.userName)
-      .setAddress(credentials.address)
-      .setPublicKey(Numeric.toHexStringNoPrefix(ecKeyPair.publicKey))
-      .setPublicEncryptionKey(libsodiumPublicKey.publicKey)
-      .build()
-
+    fun generateExchangeMessageResponse(): Exchange.ExchangeKeysResponse =
+        Exchange.ExchangeKeysResponse.newBuilder()
+            .setUsername(xmppProperties.userName)
+            .setAddress(credentials.address)
+            .setPublicKey(Numeric.toHexStringNoPrefix(ecKeyPair.publicKey))
+            .setPublicEncryptionKey(libsodiumPublicKey.publicKey)
+            .build()
 }

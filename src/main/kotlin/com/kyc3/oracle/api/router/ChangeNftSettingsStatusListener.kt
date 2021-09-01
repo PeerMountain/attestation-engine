@@ -1,6 +1,5 @@
 package com.kyc3.oracle.api.router
 
-import com.google.protobuf.Any
 import com.kyc3.Message
 import com.kyc3.oracle.ap.ChangeNftStatus
 import com.kyc3.oracle.service.NftSettingsService
@@ -10,26 +9,26 @@ import org.springframework.stereotype.Component
 
 @Component
 class ChangeNftSettingsStatusListener(
-  private val nftSettingsService: NftSettingsService,
+    private val nftSettingsService: NftSettingsService,
 ) :
-  OracleListener<ChangeNftStatus.ChangeNftSettingsStatusRequest, ChangeNftStatus.ChangeNftSettingsStatusResponse> {
+    OracleListener<ChangeNftStatus.ChangeNftSettingsStatusRequest, ChangeNftStatus.ChangeNftSettingsStatusResponse> {
 
-  private val log = LoggerFactory.getLogger(javaClass)
+    private val log = LoggerFactory.getLogger(javaClass)
 
-  override fun type(): Class<ChangeNftStatus.ChangeNftSettingsStatusRequest> =
-    ChangeNftStatus.ChangeNftSettingsStatusRequest::class.java
+    override fun type(): Class<ChangeNftStatus.ChangeNftSettingsStatusRequest> =
+        ChangeNftStatus.ChangeNftSettingsStatusRequest::class.java
 
-  override fun accept(event: Message.SignedMessage, chat: Chat): ChangeNftStatus.ChangeNftSettingsStatusResponse =
-    nftSettingsService.changeNftStatus(event.message.unpack(type()))
-      .takeIf { it }
-      ?.let {
-        ChangeNftStatus.ChangeNftSettingsStatusResponse.newBuilder()
-          .build()
-      }
-      .also {
-        if (it == null) {
-          log.info("process='ChangeNftSettingsStatusListener' message='status can't be changed'")
-        }
-      }
-      ?: throw IllegalArgumentException("status can't be changed")
+    override fun accept(event: Message.SignedMessage, chat: Chat): ChangeNftStatus.ChangeNftSettingsStatusResponse =
+        nftSettingsService.changeNftStatus(event.message.unpack(type()))
+            .takeIf { it }
+            ?.let {
+                ChangeNftStatus.ChangeNftSettingsStatusResponse.newBuilder()
+                    .build()
+            }
+            .also {
+                if (it == null) {
+                    log.info("process='ChangeNftSettingsStatusListener' message='status can't be changed'")
+                }
+            }
+            ?: throw IllegalArgumentException("status can't be changed")
 }

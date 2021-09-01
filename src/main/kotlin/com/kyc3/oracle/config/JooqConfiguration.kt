@@ -12,19 +12,19 @@ import javax.sql.DataSource
 @Configuration
 class JooqConfiguration {
 
-  @Bean
-  fun connectionProvider(dataSource: DataSource): DataSourceConnectionProvider =
-      DataSourceConnectionProvider(TransactionAwareDataSourceProxy(dataSource))
+    @Bean
+    fun connectionProvider(dataSource: DataSource): DataSourceConnectionProvider =
+        DataSourceConnectionProvider(TransactionAwareDataSourceProxy(dataSource))
 
-  @Bean
-  fun configuration(connectionProvider: DataSourceConnectionProvider): DefaultConfiguration =
-      DefaultConfiguration()
-          .also {
-            it.set(connectionProvider)
-            it.setSQLDialect(SQLDialect.POSTGRES)
-          }
+    @Bean
+    fun configuration(connectionProvider: DataSourceConnectionProvider): DefaultConfiguration =
+        DefaultConfiguration()
+            .also {
+                it.set(connectionProvider)
+                it.setSQLDialect(SQLDialect.POSTGRES)
+            }
 
-  @Bean
-  fun dsl(configuration: DefaultConfiguration): DefaultDSLContext =
-      DefaultDSLContext(configuration)
+    @Bean
+    fun dsl(configuration: DefaultConfiguration): DefaultDSLContext =
+        DefaultDSLContext(configuration)
 }

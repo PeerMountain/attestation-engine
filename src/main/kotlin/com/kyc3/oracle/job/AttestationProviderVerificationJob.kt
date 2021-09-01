@@ -9,11 +9,11 @@ class AttestationProviderVerificationJob(
     private val attestationProviderService: AttestationProviderService
 ) {
 
-  @Scheduled(fixedDelay = 10_000)
-  fun checkAttestationProviderTransactions() {
-    attestationProviderService.findProvidersToProcess()
-        .forEach {
-          attestationProviderService.validateProviderRegistration(it)
-        }
-  }
+    @Scheduled(fixedDelay = 10_000)
+    fun checkAttestationProviderTransactions() {
+        attestationProviderService.findProvidersToProcess()
+            .forEach {
+                attestationProviderService.validateProviderRegistration(it)
+            }
+    }
 }

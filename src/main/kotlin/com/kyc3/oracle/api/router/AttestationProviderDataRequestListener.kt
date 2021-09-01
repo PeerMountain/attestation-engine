@@ -1,6 +1,5 @@
 package com.kyc3.oracle.api.router
 
-import com.google.protobuf.Any
 import com.kyc3.Message
 import com.kyc3.oracle.ap.AttestationProviderOuterClass
 import com.kyc3.oracle.ap.Data
@@ -12,33 +11,33 @@ import org.springframework.stereotype.Component
 
 @Component
 class AttestationProviderDataRequestListener(
-  private val oracleAPIResponse: OracleAPIResponse,
-  private val attestationProviderService: AttestationProviderService
+    private val oracleAPIResponse: OracleAPIResponse,
+    private val attestationProviderService: AttestationProviderService
 ) :
-  OracleListener<Data.AttestationProviderDataRequest, Data.AttestationProviderDataResponse> {
+    OracleListener<Data.AttestationProviderDataRequest, Data.AttestationProviderDataResponse> {
 
-  private val log = LoggerFactory.getLogger(javaClass)
+    private val log = LoggerFactory.getLogger(javaClass)
 
-  override fun type(): Class<Data.AttestationProviderDataRequest> =
-    Data.AttestationProviderDataRequest::class.java
+    override fun type(): Class<Data.AttestationProviderDataRequest> =
+        Data.AttestationProviderDataRequest::class.java
 
-  override fun accept(event: Message.SignedMessage, chat: Chat): Data.AttestationProviderDataResponse =
-    event.message.unpack(type()).address
-      .let { attestationProviderService.getProviderByAddress(it) }
-      ?.let {
-        Data.AttestationProviderDataResponse.newBuilder()
-          .setProvider(
-            AttestationProviderOuterClass.AttestationProvider.newBuilder()
-              .setAddress(it.address)
-              .setName(it.name)
-              .build()
-          )
-          .build()
-      }
-      .also {
-        if (it == null) {
-          log.info("process='AttestationProviderDataRequestListener' message='can't find provider by address'")
-        }
-      }
-      ?: throw IllegalArgumentException("can't find provider by address")
+    override fun accept(event: Message.SignedMessage, chat: Chat): Data.AttestationProviderDataResponse =
+        event.message.unpack(type()).address
+            .let { attestationProviderService.getProviderByAddress(it) }
+            ?.let {
+                Data.AttestationProviderDataResponse.newBuilder()
+                    .setProvider(
+                        AttestationProviderOuterClass.AttestationProvider.newBuilder()
+                            .setAddress(it.address)
+                            .setName(it.name)
+                            .build()
+                    )
+                    .build()
+            }
+            .also {
+                if (it == null) {
+                    log.info("process='AttestationProviderDataRequestListener' message='can't find provider by address'")
+                }
+            }
+            ?: throw IllegalArgumentException("can't find provider by address")
 }

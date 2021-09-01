@@ -1,0 +1,5 @@
+version: '3.5'
+
+services:
+  testnet:
+    image: trufflesuite/ganache-cli:v6.12.2

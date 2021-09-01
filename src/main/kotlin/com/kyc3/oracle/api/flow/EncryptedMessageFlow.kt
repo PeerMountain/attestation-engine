@@ -10,28 +10,28 @@ import org.springframework.stereotype.Service
 
 @Service
 class EncryptedMessageFlow(
-  private val oracleRouter: OracleRouter,
-  private val messageParser: MessageParser,
-  private val messageDecryptService: EncryptionService,
-  private val oracleAPIResponse: OracleAPIResponse,
-  private val signatureVerificationService: SignatureVerificationService,
+    private val oracleRouter: OracleRouter,
+    private val messageParser: MessageParser,
+    private val messageDecryptService: EncryptionService,
+    private val oracleAPIResponse: OracleAPIResponse,
+    private val signatureVerificationService: SignatureVerificationService,
 ) {
 
-  fun encryptedMessage(from: EntityBareJid, chat: Chat, message: Message.EncryptedMessage) {
-    val decryptedMessage = messageDecryptService.decryptMessage(message)
-    val signedMessage = messageParser.parseSignedMessage(String(decryptedMessage))
+    fun encryptedMessage(from: EntityBareJid, chat: Chat, message: Message.EncryptedMessage) {
+        val decryptedMessage = messageDecryptService.decryptMessage(message)
+        val signedMessage = messageParser.parseSignedMessage(String(decryptedMessage))
 
-    doIfValid(from.asEntityBareJidString(), signedMessage) { signed ->
-      oracleRouter.route(signed, chat)
+        doIfValid(from.asEntityBareJidString(), signedMessage) { signed ->
+            oracleRouter.route(signed, chat)
+        }
+            ?.let { oracleAPIResponse.responseToClient(signedMessage.publicKey, chat, it) }
     }
-      ?.let { oracleAPIResponse.responseToClient(signedMessage.publicKey, chat, it) }
-  }
 
-  fun doIfValid(
-    from: String,
-    message: Message.SignedMessage,
-    consumer: (Message.SignedMessage) -> GeneratedMessageV3?
-  ) =
-    signatureVerificationService.verify(from, message)
-      ?: consumer(message)
+    fun doIfValid(
+        from: String,
+        message: Message.SignedMessage,
+        consumer: (Message.SignedMessage) -> GeneratedMessageV3?
+    ) =
+        signatureVerificationService.verify(from, message)
+            ?: consumer(message)
 }

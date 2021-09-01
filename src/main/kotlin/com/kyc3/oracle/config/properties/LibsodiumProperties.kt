@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component
 @Component
 @ConfigurationProperties(prefix = "libsodium")
 class LibsodiumProperties {
-  lateinit var path: String
+    lateinit var path: String
 }

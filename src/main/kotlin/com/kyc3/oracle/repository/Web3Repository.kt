@@ -9,7 +9,7 @@ class Web3Repository(
     private val web3j: Web3j
 ) {
 
-  fun getTransactionReceipt(transactionHash: String): EthGetTransactionReceipt =
-      web3j.ethGetTransactionReceipt(transactionHash)
-          .send()
+    fun getTransactionReceipt(transactionHash: String): EthGetTransactionReceipt =
+        web3j.ethGetTransactionReceipt(transactionHash)
+            .send()
 }
