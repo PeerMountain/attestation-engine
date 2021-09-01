@@ -20,8 +20,7 @@ class IncomingMessageManager(
                 exchangeMessageFlow.exchange(from, chat, generalMessage.exchange)
             Message.GeneralMessage.BodyCase.MESSAGE ->
                 encryptedMessageFlow.encryptedMessage(from, chat, generalMessage.message)
-            Message.GeneralMessage.BodyCase.BODY_NOT_SET ->
-                throw IllegalStateException("Body not set")
+            Message.GeneralMessage.BodyCase.BODY_NOT_SET -> throw IllegalStateException("Body not set")
         }
     }
 }
