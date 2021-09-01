@@ -11,75 +11,75 @@ import java.time.ZoneOffset
 
 @Repository
 class NftSettingsRepository(
-  private val dsl: DSLContext
+    private val dsl: DSLContext
 ) {
 
-  fun createNft(nft: NftSettingsRecord): Int =
-    dsl.insertInto(Tables.NFT_SETTINGS)
-      .columns(
-        Tables.NFT_SETTINGS.AP_ID,
-        Tables.NFT_SETTINGS.TYPE,
-        Tables.NFT_SETTINGS.PERPETUITY,
-        Tables.NFT_SETTINGS.PRICE,
-        Tables.NFT_SETTINGS.EXPIRATION,
-        Tables.NFT_SETTINGS.SIGNED_MESSAGE,
-      )
-      .values(
-        nft.apId,
-        nft.type,
-        nft.perpetuity,
-        nft.price,
-        nft.expiration,
-        nft.signedMessage
-      )
-      .execute()
+    fun createNft(nft: NftSettingsRecord): Int =
+        dsl.insertInto(Tables.NFT_SETTINGS)
+            .columns(
+                Tables.NFT_SETTINGS.AP_ID,
+                Tables.NFT_SETTINGS.TYPE,
+                Tables.NFT_SETTINGS.PERPETUITY,
+                Tables.NFT_SETTINGS.PRICE,
+                Tables.NFT_SETTINGS.EXPIRATION,
+                Tables.NFT_SETTINGS.SIGNED_MESSAGE,
+            )
+            .values(
+                nft.apId,
+                nft.type,
+                nft.perpetuity,
+                nft.price,
+                nft.expiration,
+                nft.signedMessage
+            )
+            .execute()
 
-  fun findByNftType(nftType: Int): NftSettingsRecord? =
-    dsl.selectFrom(Tables.NFT_SETTINGS)
-      .where(Tables.NFT_SETTINGS.TYPE.eq(nftType))
-      .fetchOne()
+    fun findByNftType(nftType: Int): NftSettingsRecord? =
+        dsl.selectFrom(Tables.NFT_SETTINGS)
+            .where(Tables.NFT_SETTINGS.TYPE.eq(nftType))
+            .fetchOne()
 
-  fun findAll(request: ListNft.ListNftRequest): List<EnrichedNftSettings> =
-    dsl.select(
-      Tables.NFT_SETTINGS.ID,
-      Tables.ATTESTATION_PROVIDER.ADDRESS,
-      Tables.NFT_SETTINGS.TYPE,
-      Tables.NFT_SETTINGS.PERPETUITY,
-      Tables.NFT_SETTINGS.EXPIRATION,
-      Tables.NFT_SETTINGS.PRICE,
-      Tables.NFT_SETTINGS.SIGNED_MESSAGE,
-      Tables.NFT_SETTINGS.STATUS
-    )
-      .from(Tables.NFT_SETTINGS)
-      .join(Tables.ATTESTATION_PROVIDER)
-      .on(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
-      .let { condition ->
-        request.apAddress
-          .takeIf { it.isNotBlank() }
-          ?.let {
-            condition.where(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(it))
-          }
-          ?: condition
-      }
-      .fetch {
-        EnrichedNftSettings(
-          id = it.get(Tables.NFT_SETTINGS.ID),
-          apAddress = it.get(Tables.ATTESTATION_PROVIDER.ADDRESS),
-          type = it.get(Tables.NFT_SETTINGS.TYPE),
-          perpetuity = it.get(Tables.NFT_SETTINGS.PERPETUITY),
-          expiration = it.get(Tables.NFT_SETTINGS.EXPIRATION).toInstant(ZoneOffset.UTC).epochSecond,
-          price = it.get(Tables.NFT_SETTINGS.PRICE),
-          signedMessage = it.get(Tables.NFT_SETTINGS.SIGNED_MESSAGE),
-          status = it.get(Tables.NFT_SETTINGS.STATUS),
+    fun findAll(request: ListNft.ListNftRequest): List<EnrichedNftSettings> =
+        dsl.select(
+            Tables.NFT_SETTINGS.ID,
+            Tables.ATTESTATION_PROVIDER.ADDRESS,
+            Tables.NFT_SETTINGS.TYPE,
+            Tables.NFT_SETTINGS.PERPETUITY,
+            Tables.NFT_SETTINGS.EXPIRATION,
+            Tables.NFT_SETTINGS.PRICE,
+            Tables.NFT_SETTINGS.SIGNED_MESSAGE,
+            Tables.NFT_SETTINGS.STATUS
         )
-      }
+            .from(Tables.NFT_SETTINGS)
+            .join(Tables.ATTESTATION_PROVIDER)
+            .on(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
+            .let { condition ->
+                request.apAddress
+                    .takeIf { it.isNotBlank() }
+                    ?.let {
+                        condition.where(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(it))
+                    }
+                    ?: condition
+            }
+            .fetch {
+                EnrichedNftSettings(
+                    id = it.get(Tables.NFT_SETTINGS.ID),
+                    apAddress = it.get(Tables.ATTESTATION_PROVIDER.ADDRESS),
+                    type = it.get(Tables.NFT_SETTINGS.TYPE),
+                    perpetuity = it.get(Tables.NFT_SETTINGS.PERPETUITY),
+                    expiration = it.get(Tables.NFT_SETTINGS.EXPIRATION).toInstant(ZoneOffset.UTC).epochSecond,
+                    price = it.get(Tables.NFT_SETTINGS.PRICE),
+                    signedMessage = it.get(Tables.NFT_SETTINGS.SIGNED_MESSAGE),
+                    status = it.get(Tables.NFT_SETTINGS.STATUS),
+                )
+            }
 
-  fun updateStatusById(dto: ChangeNftStatus.ChangeNftSettingsStatusRequest): Int =
-    dsl.update(Tables.NFT_SETTINGS)
-      .set(Tables.NFT_SETTINGS.STATUS, dto.activate)
-      .from(Tables.ATTESTATION_PROVIDER)
-      .where(Tables.NFT_SETTINGS.ID.eq(dto.nftId))
-      .and(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
-      .and(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(dto.apAddress))
-      .execute()
+    fun updateStatusById(dto: ChangeNftStatus.ChangeNftSettingsStatusRequest): Int =
+        dsl.update(Tables.NFT_SETTINGS)
+            .set(Tables.NFT_SETTINGS.STATUS, dto.activate)
+            .from(Tables.ATTESTATION_PROVIDER)
+            .where(Tables.NFT_SETTINGS.ID.eq(dto.nftId))
+            .and(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
+            .and(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(dto.apAddress))
+            .execute()
 }

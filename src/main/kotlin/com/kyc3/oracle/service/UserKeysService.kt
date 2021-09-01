@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserKeysService(
-  private val cache: Cache<String, UserKeys>
+    private val cache: Cache<String, UserKeys>
 ) {
 
-  fun store(address: String, userKeys: UserKeys): Unit =
-    cache.put(address, userKeys)
+    fun store(address: String, userKeys: UserKeys): Unit =
+        cache.put(address, userKeys)
 
-  fun getUserKeys(address: String): UserKeys? =
-    cache.get(address)
+    fun getUserKeys(address: String): UserKeys? =
+        cache.get(address)
 }

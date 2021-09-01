@@ -9,5 +9,5 @@ import org.springframework.scheduling.annotation.EnableScheduling
 class OracleApplication
 
 fun main(args: Array<String>) {
-  runApplication<OracleApplication>(*args)
+    runApplication<OracleApplication>(*args)
 }

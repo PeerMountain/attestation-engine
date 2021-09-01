@@ -6,5 +6,5 @@ import org.springframework.stereotype.Component
 @Component
 @ConfigurationProperties(prefix = "wallet")
 class WalletProperties {
-  lateinit var privateKey: String
+    lateinit var privateKey: String
 }
