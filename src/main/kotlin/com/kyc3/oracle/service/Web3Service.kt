@@ -37,4 +37,7 @@ class Web3Service(
 
     fun sign(body: String): Sign.SignatureData =
         Sign.signPrefixedMessage(Numeric.hexStringToByteArray(Hash.sha3String(body)), ecKeyPair)
+
+    fun signHex(body: String): Sign.SignatureData =
+        Sign.signPrefixedMessage(Numeric.hexStringToByteArray(Hash.sha3(body)), ecKeyPair)
 }

@@ -28,6 +28,7 @@ class DataForAttestationRequestListener(
                         .setHashKeyArray(it.hashKeyArray)
                         .setTokenUri(it.tokenUri)
                         .setHashedData(it.hashedData)
+                        .setNftType(it.nftType)
                         .build()
                 }
             }

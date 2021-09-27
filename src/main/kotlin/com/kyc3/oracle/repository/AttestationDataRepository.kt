@@ -31,15 +31,36 @@ class AttestationDataRepository(
             )
             .execute()
 
-    fun findAllForProvider(apAddress: String): List<AttestationDataRecord> =
-        dsl.select(Tables.ATTESTATION_DATA.asterisk())
+    fun findAllForProvider(apAddress: String): List<EnrichedAttestationData> =
+        dsl.select(
+            Tables.ATTESTATION_DATA.ID,
+            Tables.NFT_SETTINGS.TYPE,
+            Tables.ATTESTATION_DATA.CUSTOMER_ADDRESS,
+            Tables.ATTESTATION_DATA.DATA,
+            Tables.ATTESTATION_DATA.HASH_KEY_ARRAY,
+            Tables.ATTESTATION_DATA.TOKEN_URI,
+            Tables.ATTESTATION_DATA.HASHED_DATA,
+            Tables.ATTESTATION_DATA.SIGNED_DATA,
+        )
             .from(Tables.ATTESTATION_PROVIDER)
             .join(Tables.NFT_SETTINGS)
             .on(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
             .join(Tables.ATTESTATION_DATA)
             .on(Tables.ATTESTATION_DATA.NFT_ID.eq(Tables.NFT_SETTINGS.ID))
             .where(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(apAddress))
-            .fetchInto(AttestationDataRecord::class.java)
+            .toList()
+            .map {
+                EnrichedAttestationData(
+                    id = it.get(Tables.ATTESTATION_DATA.ID),
+                    nftType = it.get(Tables.NFT_SETTINGS.TYPE),
+                    customerAddress = it.get(Tables.ATTESTATION_DATA.CUSTOMER_ADDRESS),
+                    data = it.get(Tables.ATTESTATION_DATA.DATA),
+                    hashKeyArray = it.get(Tables.ATTESTATION_DATA.HASH_KEY_ARRAY),
+                    tokenUri = it.get(Tables.ATTESTATION_DATA.TOKEN_URI),
+                    hashedData = it.get(Tables.ATTESTATION_DATA.HASHED_DATA),
+                    signedMessage = it.get(Tables.ATTESTATION_DATA.SIGNED_DATA)
+                )
+            }
 
     fun findByNftTypeId(nftTypeId: Long): List<AttestationDataRecord> =
         dsl.selectFrom(Tables.ATTESTATION_DATA)

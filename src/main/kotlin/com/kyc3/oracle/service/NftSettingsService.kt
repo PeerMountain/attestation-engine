@@ -3,7 +3,9 @@ package com.kyc3.oracle.service
 import com.kyc3.oracle.ap.ChangeNftStatus
 import com.kyc3.oracle.ap.CreateNft
 import com.kyc3.oracle.ap.ListNft
+import com.kyc3.oracle.model.AttestationEngineEncodeNftRequest
 import com.kyc3.oracle.nft.Nft
+import com.kyc3.oracle.nft.SignedNft
 import com.kyc3.oracle.repository.AttestationProviderRepository
 import com.kyc3.oracle.repository.NftSettingsRepository
 import com.kyc3.oracle.types.tables.records.NftSettingsRecord
@@ -15,11 +17,13 @@ import java.time.ZoneId
 @Service
 class NftSettingsService(
     private val attestationProviderRepository: AttestationProviderRepository,
-    private val nftRepository: NftSettingsRepository
+    private val nftRepository: NftSettingsRepository,
+    private val abiEncoder: AbiEncoder,
+    private val web3Service: Web3Service
 ) {
 
     fun createNft(request: CreateNft.CreateNftRequest): Int? =
-        attestationProviderRepository.findByAddress(request.nftSettings.address)
+        attestationProviderRepository.findByAddress(request.nftSettings.attestationProvider)
             ?.let {
                 nftRepository.createNft(
                     NftSettingsRecord(
@@ -29,7 +33,9 @@ class NftSettingsService(
                         request.nftSettings.perpetuity,
                         request.nftSettings.price,
                         LocalDateTime.ofInstant(Instant.ofEpochSecond(request.nftSettings.expiration), ZoneId.of("UTC")),
+                        request.nftSettings.attestationEngine,
                         request.nftSettings.signedMessage,
+                        signNftSettings(request),
                         true
                     )
                 )
@@ -38,14 +44,20 @@ class NftSettingsService(
     fun getAllNft(request: ListNft.ListNftRequest): ListNft.ListNftResponse =
         nftRepository.findAll(request)
             .map {
-                Nft.NftSettings.newBuilder()
+                SignedNft.SignedNftSettings.newBuilder()
                     .setId(it.id)
-                    .setAddress(it.apAddress)
-                    .setPerpetuity(it.perpetuity)
-                    .setPrice(it.price)
-                    .setSignedMessage(it.signedMessage)
-                    .setType(it.type)
-                    .setExpiration(it.expiration)
+                    .setNft(
+                        Nft.NftSettings.newBuilder()
+                            .setPerpetuity(it.perpetuity)
+                            .setPrice(it.price)
+                            .setSignedMessage(it.attestationProviderSignedMessage)
+                            .setType(it.type)
+                            .setExpiration(it.expiration)
+                            .setAttestationEngine(it.attestationEngine)
+                            .setAttestationProvider(it.attestationProvider)
+                            .build()
+                    )
+                    .setAttestationEngineSignature(it.attestationEngineSignedMessage)
                     .setStatus(it.status)
                     .build()
             }
@@ -54,6 +66,20 @@ class NftSettingsService(
                     .addAllNftSettingsList(it)
                     .build()
             }
+
+    fun signNftSettings(request: CreateNft.CreateNftRequest): String =
+        abiEncoder.encodeNftSettings(request.nftSettings)
+            .let {
+                abiEncoder.engineEncodeNftSettings(
+                    AttestationEngineEncodeNftRequest(
+                        address = request.nftSettings.attestationEngine,
+                        encodedSettings = it,
+                        signedSettings = request.nftSettings.signedMessage
+                    )
+                )
+            }
+            .let { web3Service.signHex("0x$it") }
+            .let { SignatureHelper.toString(it) }
 
     fun changeNftStatus(dto: ChangeNftStatus.ChangeNftSettingsStatusRequest): Boolean =
         nftRepository.updateStatusById(dto) == 1
