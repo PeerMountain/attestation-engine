@@ -31,7 +31,7 @@ class AttestationDataService(
             }
     }
 
-    fun findDataForAttestation(apAddress: String): List<AttestationDataRecord> =
+    fun findDataForAttestation(apAddress: String): List<EnrichedAttestationData> =
         attestationDataRepository.findAllForProvider(apAddress)
 
     fun signAttestationData(id: Long, signedMessage: String) =

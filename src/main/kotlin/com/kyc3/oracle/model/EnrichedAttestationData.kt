@@ -8,5 +8,5 @@ data class EnrichedAttestationData(
     val hashKeyArray: String,
     val tokenUri: String,
     val hashedData: String,
-    val signedMessage: String,
+    val signedMessage: String?,
 )
