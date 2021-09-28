@@ -33,7 +33,7 @@ class Web3Service(
                     }
             }
             .let { Keys.getAddress(it) }
-            .let { address.contains(it) }
+            .let { address.contains(it, true) }
 
     fun sign(body: String): Sign.SignatureData =
         Sign.signPrefixedMessage(Numeric.hexStringToByteArray(Hash.sha3String(body)), ecKeyPair)
