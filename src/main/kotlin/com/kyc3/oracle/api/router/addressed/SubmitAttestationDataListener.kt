@@ -1,7 +1,8 @@
-package com.kyc3.oracle.api.router
+package com.kyc3.oracle.api.router.addressed
 
 import com.kyc3.Message
 import com.kyc3.oracle.ap.SignAttestation
+import com.kyc3.oracle.api.router.OracleAddressedListener
 import com.kyc3.oracle.model.AttestationDataDto
 import com.kyc3.oracle.service.AttestationDataService
 import com.kyc3.oracle.user.SubmitAttestation
@@ -12,11 +13,11 @@ import org.springframework.stereotype.Service
 class SubmitAttestationDataListener(
     private val attestationDataService: AttestationDataService
 ) :
-    OracleListener<SubmitAttestation.SubmitAttestationDataRequest, SignAttestation.SignAttestationDataResponse> {
+    OracleAddressedListener<SubmitAttestation.SubmitAttestationDataRequest, SignAttestation.SignAttestationDataResponse> {
     override fun type(): Class<SubmitAttestation.SubmitAttestationDataRequest> =
         SubmitAttestation.SubmitAttestationDataRequest::class.java
 
-    override fun accept(event: Message.SignedMessage, chat: Chat): SignAttestation.SignAttestationDataResponse =
+    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): SignAttestation.SignAttestationDataResponse =
         event.message.unpack(type())
             .let {
                 attestationDataService.submitAttestationData(

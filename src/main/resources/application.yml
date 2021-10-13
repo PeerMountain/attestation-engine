@@ -6,16 +6,21 @@ spring:
     driverClassName: org.postgresql.Driver
 
 xmpp:
-  domain: ${XMPP_DOMAIN:jabber.hot-chilli.net}
-  userName: ${XMPP_USERNAME:oracle}
-  password: ${XMPP_PASSWORD:oracle}
-  host: ${XMPP_HOST:jabber.hot-chilli.net}
+  domain: ${XMPP_DOMAIN:xmpp.kyc3.com}
+  host: ${XMPP_HOST:xmpp.kyc3.com}
+  user:
+    userName: ${XMPP_USERNAME:0x3f9dC0e46eb11EC9d91a6A2E1eC1916D5d0d2982}
+    #  0x3f9dC0e46eb11EC9d91a6A2E1eC1916D5d0d2982
+    password: ${XMPP_PASSWORD:oracle}
+  admin:
+    userName: igor
+    password: A4Uj7EeQmqRKxTnXBu26yPrg+vJz/NLf3ZbGFad5
 
 wallet:
   privateKey: ${ACCOUNT_PRIVATE_KEY:e5cdf22794357fa5e03e4c92bb1a71c52817669fb6eb60663d8d341e0fdb8a03}
 
 web3:
-  host: ${WEB3_HOST:http://localhost:8545}
+  host: ${WEB3_HOST:https://public-node.testnet.rsk.co}
 
 libsodium:
   path: /usr/lib/libsodium.so

@@ -45,18 +45,25 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-
-    implementation("org.igniterealtime.smack:smack-tcp:4.3.5")
-    implementation("org.igniterealtime.smack:smack-im:4.3.5")
-    implementation("org.igniterealtime.smack:smack-extensions:4.3.5")
-    implementation("org.igniterealtime.smack:smack-java7:4.3.5")
+    implementation("org.igniterealtime.smack:smack-tcp:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-core:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-im:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-extensions:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-java7:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-experimental:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-bosh:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-xmlparser-xpp3:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-xmlparser-stax:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-streammanagement:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-websocket:4.5.0-alpha1-SNAPSHOT")
+    implementation("org.igniterealtime.smack:smack-websocket-okhttp:4.5.0-alpha1-SNAPSHOT")
 
     implementation("commons-io:commons-io:2.8.0")
 
     implementation("org.web3j:core:5.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
-    implementation("com.kyc3:oracle-definitions:4385f93")
+    implementation("com.kyc3:oracle-definitions:1a86bb7")
 
     runtimeOnly("org.postgresql:postgresql")
 
@@ -64,6 +71,7 @@ dependencies {
         exclude("org.slf4j", "slf4j-log4j12")
     }
 
+    implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.ehcache:ehcache:3.1.3")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")

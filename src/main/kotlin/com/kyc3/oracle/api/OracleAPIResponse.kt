@@ -9,14 +9,11 @@ import com.kyc3.oracle.service.UserKeysService
 import com.kyc3.oracle.service.Web3Service
 import org.jivesoftware.smack.chat2.Chat
 import org.springframework.stereotype.Service
-import org.web3j.crypto.ECKeyPair
-import org.web3j.crypto.Keys
 import java.util.Base64
 
 @Service
 class OracleAPIResponse(
     private val base64Encoder: Base64.Encoder,
-    private val ecKeyPair: ECKeyPair,
     private val web3Service: Web3Service,
     private val encryptionService: EncryptionService,
     private val userKeysService: UserKeysService,
@@ -25,13 +22,17 @@ class OracleAPIResponse(
     fun responseDirectly(chat: Chat, message: GeneratedMessageV3) =
         chat.send(encodeMessage(message))
 
-    fun responseToClient(publicKey: String, chat: Chat, message: GeneratedMessageV3): Unit? =
+    fun responseToClient(chat: Chat, message: GeneratedMessageV3): Unit? =
         Any.pack(message)
             .let {
-                Message.SignedMessage.newBuilder()
+                Message.SignedAddressedMessage.newBuilder()
                     .setMessage(it)
-                    .setAddress(Keys.getAddress(ecKeyPair))
                     .setSignature(SignatureHelper.toString(web3Service.sign(encodeMessage(it))))
+                    .build()
+            }
+            .let {
+                Message.SignedMessage.newBuilder()
+                    .setAddressed(it)
                     .build()
             }
             .toByteArray()

@@ -46,7 +46,7 @@ class TimestampAPService(
     fun sendToProvider(message: GeneratedMessageV3): Unit =
         userKeysService.getUserKeys("timestamp-ap@jabber.hot-chilli.net")
             ?.let {
-                oracleAPIResponse.responseToClient(it.publicEncryptionKey, chat, message)
+                oracleAPIResponse.responseToClient(chat, message)
             }
             ?: run {
                 log.warn("AP public keys are not initialized")

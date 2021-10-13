@@ -26,7 +26,6 @@ class ExchangeMessageFlow(
             )
         )
         apiResponse.responseToClient(
-            exchange.publicEncryptionKey,
             chat,
             exchangeKeysHolder.generateExchangeMessageResponse()
         )

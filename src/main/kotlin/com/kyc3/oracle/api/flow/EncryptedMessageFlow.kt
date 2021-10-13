@@ -24,10 +24,10 @@ class EncryptedMessageFlow(
         doIfValid(from.asEntityBareJidString(), signedMessage) { signed ->
             oracleRouter.route(signed, chat)
         }
-            ?.let { oracleAPIResponse.responseToClient(signedMessage.publicKey, chat, it) }
+            ?.let { oracleAPIResponse.responseToClient(chat, it) }
     }
 
-    fun doIfValid(
+    private fun doIfValid(
         from: String,
         message: Message.SignedMessage,
         consumer: (Message.SignedMessage) -> GeneratedMessageV3?

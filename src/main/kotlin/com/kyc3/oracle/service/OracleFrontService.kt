@@ -18,5 +18,5 @@ class OracleFrontService(
     private val chat: Chat = chatManager.chatWith(jid)
 
     fun sendToFrontend(publicKey: String, message: GeneratedMessageV3) =
-        oracleAPIResponse.responseToClient(publicKey, chat, message)
+        oracleAPIResponse.responseToClient(chat, message)
 }

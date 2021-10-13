@@ -7,7 +7,12 @@ import org.springframework.stereotype.Component
 @ConfigurationProperties(prefix = "xmpp")
 class XmppProperties {
     lateinit var domain: String
-    lateinit var userName: String
-    lateinit var password: String
     lateinit var host: String
+    var user: Credentials = Credentials()
+    var admin: Credentials = Credentials()
+
+    class Credentials {
+        lateinit var userName: String
+        lateinit var password: String
+    }
 }
