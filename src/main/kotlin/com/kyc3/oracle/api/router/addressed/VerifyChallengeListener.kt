@@ -20,6 +20,7 @@ class VerifyChallengeListener(
         event.message.unpack(type())
             .let {
                 oracleFrontService.sendToFrontend(
+                    it.userAddress,
                     it.userPublicKey,
                     ChallengeSigned.ChallengeSignedResponse.newBuilder()
                         .setRedirectUrl(it.redirectUrl)

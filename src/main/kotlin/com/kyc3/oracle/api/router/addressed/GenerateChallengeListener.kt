@@ -20,6 +20,7 @@ class GenerateChallengeListener(
         event.message.unpack(type())
             .let {
                 oracleFrontService.sendToFrontend(
+                    it.userAddress,
                     it.userPublicKey,
                     InitiateNftPurchase.InitiateNFTPurchaseResponse.newBuilder()
                         .setUserAddress(it.userAddress)

@@ -35,10 +35,6 @@ class AttestationProviderDataRequestListener(
                     )
                     .build()
             }
-            .also {
-                if (it == null) {
-                    log.info("process='AttestationProviderDataRequestListener' message='can't find provider by address'")
-                }
-            }
-            ?: throw IllegalArgumentException("can't find provider by address")
+            ?: Data.AttestationProviderDataResponse.newBuilder()
+                .build()
 }

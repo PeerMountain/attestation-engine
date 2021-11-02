@@ -45,6 +45,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
     implementation("org.igniterealtime.smack:smack-tcp:4.5.0-alpha1-SNAPSHOT")
     implementation("org.igniterealtime.smack:smack-core:4.5.0-alpha1-SNAPSHOT")
     implementation("org.igniterealtime.smack:smack-im:4.5.0-alpha1-SNAPSHOT")
@@ -63,7 +64,7 @@ dependencies {
     implementation("org.web3j:core:5.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
-    implementation("com.kyc3:oracle-definitions:1a86bb7")
+    implementation("com.kyc3:oracle-definitions:c34e295")
 
     runtimeOnly("org.postgresql:postgresql")
 

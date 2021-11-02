@@ -12,6 +12,7 @@ import org.jivesoftware.smackx.iqregister.AccountManager
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.Scheduled
+import org.web3j.crypto.Credentials
 
 @Configuration
 class XMPPConfiguration(
@@ -19,13 +20,15 @@ class XMPPConfiguration(
 ) {
 
     @Bean
-    fun connectionConfiguration(): ModularXmppClientToServerConnectionConfiguration =
+    fun connectionConfiguration(
+        credentials: Credentials
+    ): ModularXmppClientToServerConnectionConfiguration =
         ModularXmppClientToServerConnectionConfiguration.builder()
             .also {
                 it.removeAllModules()
             }
             .setXmppDomain(xmppProperties.domain)
-            .setUsernameAndPassword(xmppProperties.user.userName, xmppProperties.user.password)
+            .setUsernameAndPassword(credentials.address, xmppProperties.user.password)
             .setHost(xmppProperties.host)
             .also {
                 it.addModule(
