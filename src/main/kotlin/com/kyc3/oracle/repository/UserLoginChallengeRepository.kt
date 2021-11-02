@@ -37,5 +37,4 @@ class UserLoginChallengeRepository(
             )
             .where(UserLoginChallenge.USER_LOGIN_CHALLENGE.ADDRESS.eq(address))
             .execute()
-
 }
