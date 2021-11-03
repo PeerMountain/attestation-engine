@@ -20,7 +20,7 @@ class TimestampAPService(
     private val exchangeKeysHolder: ExchangeKeysHolder
 ) {
 
-    private val jid: EntityBareJid = JidCreate.entityBareFrom("timestamp-ap@jabber.hot-chilli.net")
+    private val jid: EntityBareJid = JidCreate.entityBareFrom("0x3f9dc0e46eb11ec9d91a6a2e1ec1916d5d0d2982@xmpp.kyc3.com")
     private val chat: Chat = chatManager.chatWith(jid)
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -44,9 +44,9 @@ class TimestampAPService(
         )
 
     fun sendToProvider(message: GeneratedMessageV3): Unit =
-        userKeysService.getUserKeys("timestamp-ap@jabber.hot-chilli.net")
+        userKeysService.getUserKeys("0x3f9dc0e46eb11ec9d91a6a2e1ec1916d5d0d2982@xmpp.kyc3.com")
             ?.let {
-                oracleAPIResponse.responseToClient(it.publicEncryptionKey, chat, message)
+                oracleAPIResponse.responseToClient(chat, message)
             }
             ?: run {
                 log.warn("AP public keys are not initialized")

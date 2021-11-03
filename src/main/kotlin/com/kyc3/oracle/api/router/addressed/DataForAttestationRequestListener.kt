@@ -1,7 +1,8 @@
-package com.kyc3.oracle.api.router
+package com.kyc3.oracle.api.router.addressed
 
 import com.kyc3.Message
 import com.kyc3.oracle.ap.RequestAttestationData
+import com.kyc3.oracle.api.router.OracleAddressedListener
 import com.kyc3.oracle.attestation.AttestationDataOuterClass
 import com.kyc3.oracle.service.AttestationDataService
 import org.jivesoftware.smack.chat2.Chat
@@ -11,12 +12,12 @@ import org.springframework.stereotype.Component
 class DataForAttestationRequestListener(
     private val attestationDataService: AttestationDataService
 ) :
-    OracleListener<RequestAttestationData.DataForAttestationRequest, RequestAttestationData.DataForAttestationResponse> {
+    OracleAddressedListener<RequestAttestationData.DataForAttestationRequest, RequestAttestationData.DataForAttestationResponse> {
 
     override fun type(): Class<RequestAttestationData.DataForAttestationRequest> =
         RequestAttestationData.DataForAttestationRequest::class.java
 
-    override fun accept(event: Message.SignedMessage, chat: Chat): RequestAttestationData.DataForAttestationResponse =
+    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): RequestAttestationData.DataForAttestationResponse =
         event.message.unpack(type())
             .let { attestationDataService.findDataForAttestation(it.apAddress) }
             .let { list ->

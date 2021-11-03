@@ -29,6 +29,10 @@ gradle.projectsLoaded {
                     create<HttpHeaderAuthentication>("header")
                 }
             }
+            maven {
+                url = uri("https://www.igniterealtime.org/archiva/repository/maven")
+                name = "Nightly Apache"
+            }
         }
     }
 }
