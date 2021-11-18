@@ -15,8 +15,7 @@ xmpp:
     password: ${XMPP_ADMIN_PASSWORD:A4Uj7EeQmqRKxTnXBu26yPrg+vJz/NLf3ZbGFad5}
 
 wallet:
-  privateKey: ${ACCOUNT_PRIVATE_KEY:c286e197a0cdd1a2b50d896415e5e00fdc4591e184676c40e9dbe68cf8ef8ca2}
-#  privateKey: ${ACCOUNT_PRIVATE_KEY:cb1069723edbac7cf03e653c34bd1e273bb17e052645904aeefc8fc30a562191}
+  privateKey: ${ACCOUNT_PRIVATE_KEY:cb1069723edbac7cf03e653c34bd1e273bb17e052645904aeefc8fc30a562191}
 
 web3:
   host: ${WEB3_HOST:https://public-node.testnet.rsk.co}
