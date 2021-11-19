@@ -7,6 +7,7 @@ import org.jivesoftware.smack.c2s.ModularXmppClientToServerConnectionConfigurati
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.websocket.XmppWebSocketTransportModuleDescriptor
 import org.jivesoftware.smackx.admin.ServiceAdministrationManager
+import org.jxmpp.jid.impl.JidCreate
 import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -48,7 +49,12 @@ class XMPPConfiguration(
                 log.info("TEMP login print = ${xmppProperties.admin.userName}")
             }
             .setXmppDomain(xmppProperties.domain)
-            .setUsernameAndPassword(xmppProperties.admin.userName, xmppProperties.admin.password)
+            .setUsernameAndPassword(
+                JidCreate.entityBareFrom(xmppProperties.admin.userName)
+                    .localpart
+                    .asUnescapedString(),
+                xmppProperties.admin.password
+            )
             .setHost(xmppProperties.host)
             .also {
                 it.addModule(
