@@ -46,7 +46,6 @@ class XMPPConfiguration(
         ModularXmppClientToServerConnectionConfiguration.builder()
             .also {
                 it.removeAllModules()
-                log.info("TEMP login print = ${xmppProperties.admin.userName}")
             }
             .setXmppDomain(xmppProperties.domain)
             .setUsernameAndPassword(
