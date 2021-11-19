@@ -11,7 +11,7 @@ xmpp:
   user:
     password: ${XMPP_PASSWORD:oracle}
   admin:
-    userName: ${XMPP_ADMIN_USERNAME:igor}
+    userName: ${XMPP_ADMIN_USERNAME:igor@xmpp.kyc3.com}
     password: ${XMPP_ADMIN_PASSWORD:A4Uj7EeQmqRKxTnXBu26yPrg+vJz/NLf3ZbGFad5}
 
 wallet:
