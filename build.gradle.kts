@@ -72,7 +72,7 @@ dependencies {
     implementation("org.web3j:core:5.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
-    implementation("com.kyc3:oracle-definitions:c34e295")
+    implementation("com.kyc3:oracle-definitions:79cb8d4")
 
     runtimeOnly("org.postgresql:postgresql")
 

@@ -25,5 +25,4 @@ class DepositRequestListener(
                     .setDepositTransactionHash(it.transactionHash)
                     .build()
             }
-
 }

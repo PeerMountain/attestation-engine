@@ -24,5 +24,4 @@ class NftMintRequestListener(
                     .setNftMintTransactionHash(it.transactionHash)
                     .build()
             }
-
 }

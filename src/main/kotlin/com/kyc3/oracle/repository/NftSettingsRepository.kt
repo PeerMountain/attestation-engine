@@ -19,22 +19,16 @@ class NftSettingsRepository(
             .columns(
                 Tables.NFT_SETTINGS.AP_ID,
                 Tables.NFT_SETTINGS.TYPE,
-                Tables.NFT_SETTINGS.PERPETUITY,
                 Tables.NFT_SETTINGS.PRICE,
                 Tables.NFT_SETTINGS.EXPIRATION,
-                Tables.NFT_SETTINGS.ATTESTATION_ENGINE,
                 Tables.NFT_SETTINGS.ATTESTATION_PROVIDER_SIGNED_MESSAGE,
-                Tables.NFT_SETTINGS.ATTESTATION_ENGINE_SIGNED_MESSAGE,
             )
             .values(
                 nft.apId,
                 nft.type,
-                nft.perpetuity,
                 nft.price,
                 nft.expiration,
-                nft.attestationEngine,
                 nft.attestationProviderSignedMessage,
-                nft.attestationEngineSignedMessage,
             )
             .execute()
 
@@ -48,12 +42,9 @@ class NftSettingsRepository(
             Tables.NFT_SETTINGS.ID,
             Tables.ATTESTATION_PROVIDER.ADDRESS,
             Tables.NFT_SETTINGS.TYPE,
-            Tables.NFT_SETTINGS.PERPETUITY,
             Tables.NFT_SETTINGS.EXPIRATION,
             Tables.NFT_SETTINGS.PRICE,
             Tables.NFT_SETTINGS.ATTESTATION_PROVIDER_SIGNED_MESSAGE,
-            Tables.NFT_SETTINGS.ATTESTATION_ENGINE_SIGNED_MESSAGE,
-            Tables.NFT_SETTINGS.ATTESTATION_ENGINE,
             Tables.NFT_SETTINGS.STATUS
         )
             .from(Tables.NFT_SETTINGS)
@@ -71,13 +62,10 @@ class NftSettingsRepository(
                 EnrichedNftSettings(
                     id = it.get(Tables.NFT_SETTINGS.ID),
                     type = it.get(Tables.NFT_SETTINGS.TYPE),
-                    perpetuity = it.get(Tables.NFT_SETTINGS.PERPETUITY),
                     expiration = it.get(Tables.NFT_SETTINGS.EXPIRATION).toInstant(ZoneOffset.UTC).epochSecond,
                     price = it.get(Tables.NFT_SETTINGS.PRICE),
                     attestationProvider = it.get(Tables.ATTESTATION_PROVIDER.ADDRESS),
-                    attestationEngine = it.get(Tables.NFT_SETTINGS.ATTESTATION_ENGINE),
                     attestationProviderSignedMessage = it.get(Tables.NFT_SETTINGS.ATTESTATION_PROVIDER_SIGNED_MESSAGE),
-                    attestationEngineSignedMessage = it.get(Tables.NFT_SETTINGS.ATTESTATION_ENGINE_SIGNED_MESSAGE),
                     status = it.get(Tables.NFT_SETTINGS.STATUS),
                 )
             }
