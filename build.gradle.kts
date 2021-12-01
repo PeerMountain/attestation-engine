@@ -195,7 +195,3 @@ tasks["generateJooq"].finalizedBy("stopPostgresContainer")
 task<Exec>("generateWeb3J") {
     commandLine("sh", "utils/generate.sh")
 }
-
-task<Exec>("generateWeb3J") {
-    commandLine("sh", "utils/generate.sh")
-}
