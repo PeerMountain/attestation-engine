@@ -44,7 +44,7 @@ class TimestampAPService(
         )
 
     fun sendToProvider(message: GeneratedMessageV3): Unit =
-        userKeysService.getUserKeys("0x3f9dc0e46eb11ec9d91a6a2e1ec1916d5d0d2982@xmpp.kyc3.com")
+        userKeysService.getUserKeys("0x3f9dc0e46eb11ec9d91a6a2e1ec1916d5d0d2982@xmpp.kyc3.com".lowercase())
             ?.let {
                 oracleAPIResponse.responseToClient(chat, message)
             }

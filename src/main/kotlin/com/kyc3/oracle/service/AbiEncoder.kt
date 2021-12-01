@@ -5,7 +5,6 @@ import com.kyc3.oracle.nft.Nft
 import org.springframework.stereotype.Service
 import org.web3j.abi.DefaultFunctionEncoder
 import org.web3j.abi.datatypes.Address
-import org.web3j.abi.datatypes.Bool
 import org.web3j.abi.datatypes.DynamicBytes
 import org.web3j.abi.datatypes.generated.Bytes2
 import org.web3j.abi.datatypes.generated.Uint256
@@ -20,11 +19,9 @@ class AbiEncoder(
         functionEncoder.encodeParameters(
             listOf(
                 Address(nft.attestationProvider),
-                Bool(nft.perpetuity),
                 Uint256(nft.price.toLong()),
                 hexToByte(Integer.toHexString(nft.type).padStart(4, '0')),
                 Uint256(nft.expiration),
-                Address(nft.attestationEngine),
             )
         )
 

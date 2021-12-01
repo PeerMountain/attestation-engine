@@ -25,12 +25,9 @@ internal class NftSettingsRepositoryTest : AbstractIntegrationTest() {
                 null,
                 provider.id,
                 1,
-                true,
                 100,
                 LocalDateTime.now(),
                 "attestation_provider",
-                "attestation_engine",
-                "signed",
                 true
             )
         )

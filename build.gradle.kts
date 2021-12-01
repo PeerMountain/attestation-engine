@@ -29,6 +29,14 @@ val commit = grgit.head().abbreviatedId
 
 val testContainerVersion = "1.15.3"
 
+sourceSets {
+    main {
+        java {
+            srcDir("build/generated/source/java/main")
+        }
+    }
+}
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("org.springframework.boot:spring-boot-starter-jooq")
@@ -64,7 +72,7 @@ dependencies {
     implementation("org.web3j:core:5.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
-    implementation("com.kyc3:oracle-definitions:c34e295")
+    implementation("com.kyc3:oracle-definitions:8115261")
 
     runtimeOnly("org.postgresql:postgresql")
 
@@ -183,3 +191,7 @@ jooq {
 tasks["flywayMigrate"].dependsOn("startPostgresContainer")
 tasks["generateJooq"].dependsOn("flywayMigrate")
 tasks["generateJooq"].finalizedBy("stopPostgresContainer")
+
+task<Exec>("generateWeb3J") {
+    commandLine("sh", "utils/generate.sh")
+}

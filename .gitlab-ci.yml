@@ -42,7 +42,7 @@ compile:
     DOCKER_TLS_CERTDIR: ""
     LIBSODIUM_PATH: "/usr/lib/x86_64-linux-gnu/libsodium.so"
   script:
-    - ./gradlew clean build
+    - ./gradlew clean generateWeb3J build
   artifacts:
     paths:
       - build/

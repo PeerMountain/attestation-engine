@@ -1,3 +1,6 @@
+server:
+  port: 8090
+
 spring:
   datasource:
     url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/oracle}
@@ -22,3 +25,8 @@ web3:
 
 libsodium:
   path: /usr/lib/libsodium.so
+
+contracts:
+  cashier: ${CASHIER_CONTRACT_ADDRESS:0xd1A01ccF70Cd5Be98f3DFEB36e8d943260f161db}
+  trust-token: ${TRUST_TOKEN_ADDRESS:0xBe0F2b96f53744c28a61FFB9E87A4989bAf77a12}
+  erc20: ${ERC20_ADDRESS:0xA966BF3CecD850371753FDDfD293BD97F4644A01}

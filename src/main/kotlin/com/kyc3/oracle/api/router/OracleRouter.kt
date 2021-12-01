@@ -43,6 +43,6 @@ class OracleRouter(
                 log.warn("process='OracleRouter.route' message='Type can't be processed'")
             }
         }
-        ?.also { log.info("process='OracleRouter.route' type='${it.type()}'") }
+        ?.also { log.info("process='OracleRouter.route' type='${it.type()}' typeUrl=${bodySupplier().typeUrl}") }
         ?.accept(signedMessageSupplier(), chat)
 }
