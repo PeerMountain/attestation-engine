@@ -24,5 +24,4 @@ class Erc20MintListener(
                     .setTransactionHash(it.transactionHash)
                     .build()
             }
-
 }

@@ -24,5 +24,4 @@ class Erc20ApproveListener(
                     .setTransactionHash(it.transactionHash)
                     .build()
             }
-
 }
