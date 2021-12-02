@@ -19,7 +19,7 @@ class CashierContractV2Config(
         CashierContractV2.load(
             contractsProperties.cashier, web3j, credentials,
             StaticGasProvider(
-                BigInteger.valueOf(65_164_000),
+                BigInteger.valueOf(4_100_000_000L),
                 BigInteger.valueOf(6_800_000),
             )
         )
