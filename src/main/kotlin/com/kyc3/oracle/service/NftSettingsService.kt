@@ -33,20 +33,23 @@ class NftSettingsService(
                             ZoneId.of("UTC")
                         ),
                         request.nftSettings.signedMessage,
-                        true
+                        true,
+                        request.nftSettings.name,
+                        request.nftSettings.description,
+                        request.nftSettings.imageUrl,
                     )
                 )
             }
 
-    fun getAllNft(request: ListNft.ListNftRequest): ListNft.ListNftResponse =
-        nftRepository.findAll(request)
+    fun getAllNft(apAddress: String, request: ListNft.ListNftRequest): ListNft.ListNftResponse =
+        nftRepository.searchFor(request.keywords)
             .map {
                 SignedNft.SignedNftSettings.newBuilder()
                     .setId(it.id)
                     .setNft(
                         Nft.NftSettings.newBuilder()
                             .setPrice(it.price)
-                            .setSignedMessage(it.attestationProviderSignedMessage)
+                            .setSignedMessage(it.signature)
                             .setType(it.type)
                             .setExpiration(it.expiration)
                             .setAttestationProvider(it.attestationProvider)

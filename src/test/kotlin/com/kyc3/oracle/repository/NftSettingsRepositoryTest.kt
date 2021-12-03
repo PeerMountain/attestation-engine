@@ -28,7 +28,10 @@ internal class NftSettingsRepositoryTest : AbstractIntegrationTest() {
                 100,
                 LocalDateTime.now(),
                 "attestation_provider",
-                true
+                true,
+                "name",
+                "deccription",
+                "url"
             )
         )
 
