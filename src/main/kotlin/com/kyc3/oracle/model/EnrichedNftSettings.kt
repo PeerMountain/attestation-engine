@@ -6,6 +6,9 @@ data class EnrichedNftSettings(
     val price: Int,
     val expiration: Long,
     val attestationProvider: String,
-    val attestationProviderSignedMessage: String,
-    val status: Boolean
+    val signature: String,
+    val status: Boolean,
+    val name: String,
+    val description: String,
+    val imageUrl: String,
 )

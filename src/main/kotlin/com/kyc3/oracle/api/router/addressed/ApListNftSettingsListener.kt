@@ -15,5 +15,8 @@ class ApListNftSettingsListener(
         ListNft.ListNftRequest::class.java
 
     override fun accept(event: Message.SignedAddressedMessage, chat: Chat): ListNft.ListNftResponse =
-        nftSettingsService.getAllNft(event.message.unpack(type()))
+        nftSettingsService.getAllNft(
+            chat.xmppAddressOfChatPartner.localpart.asUnescapedString(),
+            event.message.unpack(type())
+        )
 }

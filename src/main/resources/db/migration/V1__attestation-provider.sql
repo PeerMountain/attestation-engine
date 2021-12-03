@@ -9,11 +9,14 @@ CREATE TABLE attestation_provider
 
 CREATE TABLE nft_settings
 (
-    id                                        BIGSERIAL PRIMARY KEY,
-    ap_id                                     BIGINT    NOT NULL REFERENCES attestation_provider (id),
-    type                                      INTEGER   NOT NULL UNIQUE,
-    price                                     INTEGER   NOT NULL,
-    expiration                                TIMESTAMP NOT NULL,
-    attestation_provider_signed_message       TEXT      NOT NULL,
-    status                                    BOOL      NOT NULL DEFAULT TRUE
+    id                   BIGSERIAL PRIMARY KEY,
+    ap_id                BIGINT    NOT NULL REFERENCES attestation_provider (id),
+    type                 INTEGER   NOT NULL UNIQUE,
+    price                INTEGER   NOT NULL,
+    expiration           TIMESTAMP NOT NULL,
+    signature            TEXT      NOT NULL,
+    status               BOOL      NOT NULL DEFAULT TRUE,
+    name                 TEXT      NOT NULL,
+    description          TEXT,
+    image_url            TEXT      NOT NULL
 );
