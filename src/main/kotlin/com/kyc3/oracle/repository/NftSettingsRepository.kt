@@ -73,7 +73,6 @@ class NftSettingsRepository(
             .and(Tables.ATTESTATION_PROVIDER.ADDRESS.eq(dto.apAddress))
             .execute()
 
-
     private fun selectFromNftJoinedAttestationProvider() =
         dsl.select(
             Tables.NFT_SETTINGS.ID,
