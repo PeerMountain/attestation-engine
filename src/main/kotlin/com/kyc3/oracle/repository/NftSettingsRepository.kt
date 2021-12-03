@@ -1,7 +1,6 @@
 package com.kyc3.oracle.repository
 
 import com.kyc3.oracle.ap.ChangeNftStatus
-import com.kyc3.oracle.ap.ListNft
 import com.kyc3.oracle.model.EnrichedNftSettings
 import com.kyc3.oracle.types.Tables
 import com.kyc3.oracle.types.tables.records.NftSettingsRecord
@@ -51,7 +50,7 @@ class NftSettingsRepository(
             .where("? % ANY(STRING_TO_ARRAY(nft_settings.name,' ') || STRING_TO_ARRAY(nft_settings.description,' '))", keywords)
             .fetch { enrichedNftSettings(it) }
 
-    fun findAll(apAddress: String, request: ListNft.ListNftRequest): List<EnrichedNftSettings> =
+    fun findAll(apAddress: String): List<EnrichedNftSettings> =
         selectFromNftJoinedAttestationProvider()
             .on(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
             .let { condition ->

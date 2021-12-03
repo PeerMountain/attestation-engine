@@ -8,6 +8,7 @@ import com.kyc3.oracle.nft.SignedNft
 import com.kyc3.oracle.repository.AttestationProviderRepository
 import com.kyc3.oracle.repository.NftSettingsRepository
 import com.kyc3.oracle.types.tables.records.NftSettingsRecord
+import com.kyc3.oracle.user.SearchNft
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.LocalDateTime
@@ -41,8 +42,8 @@ class NftSettingsService(
                 )
             }
 
-    fun getAllNft(apAddress: String, request: ListNft.ListNftRequest): ListNft.ListNftResponse =
-        nftRepository.searchFor(request.keywords)
+    fun getAllNft(apAddress: String): ListNft.ListNftResponse =
+        nftRepository.findAll(apAddress)
             .map {
                 SignedNft.SignedNftSettings.newBuilder()
                     .setId(it.id)
@@ -60,6 +61,29 @@ class NftSettingsService(
             }
             .let {
                 ListNft.ListNftResponse.newBuilder()
+                    .addAllNftSettingsList(it)
+                    .build()
+            }
+
+    fun searchNft(request: SearchNft.SearchNftRequest): SearchNft.SearchNftResponse =
+        nftRepository.searchFor(request.keywords)
+            .map {
+                SignedNft.SignedNftSettings.newBuilder()
+                    .setId(it.id)
+                    .setNft(
+                        Nft.NftSettings.newBuilder()
+                            .setPrice(it.price)
+                            .setSignedMessage(it.signature)
+                            .setType(it.type)
+                            .setExpiration(it.expiration)
+                            .setAttestationProvider(it.attestationProvider)
+                            .build()
+                    )
+                    .setStatus(it.status)
+                    .build()
+            }
+            .let {
+                SearchNft.SearchNftResponse.newBuilder()
                     .addAllNftSettingsList(it)
                     .build()
             }
