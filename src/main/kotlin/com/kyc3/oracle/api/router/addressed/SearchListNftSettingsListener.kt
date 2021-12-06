@@ -15,5 +15,12 @@ class SearchListNftSettingsListener(
         SearchNft.SearchNftRequest::class.java
 
     override fun accept(event: Message.SignedAddressedMessage, chat: Chat): SearchNft.SearchNftResponse =
-        nftSettingsService.searchNft(event.message.unpack(type()))
+        event.message.unpack(type())
+            .let {
+                if (it.keywords.isBlank()) {
+                    nftSettingsService.getAllNft()
+                } else {
+                    nftSettingsService.searchNft(it)
+                }
+            }
 }

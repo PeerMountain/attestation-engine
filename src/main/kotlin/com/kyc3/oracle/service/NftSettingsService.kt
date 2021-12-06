@@ -42,6 +42,30 @@ class NftSettingsService(
                 )
             }
 
+    fun getAllNft(): SearchNft.SearchNftResponse =
+        nftRepository.findAll()
+            .map {
+                SignedNft.SignedNftSettings.newBuilder()
+                    .setId(it.id)
+                    .setNft(
+                        Nft.NftSettings.newBuilder()
+                            .setPrice(it.price)
+                            .setSignedMessage(it.signature)
+                            .setType(it.type)
+                            .setExpiration(it.expiration)
+                            .setAttestationProvider(it.attestationProvider)
+                            .build()
+                    )
+                    .setStatus(it.status)
+                    .build()
+            }
+            .let {
+                SearchNft.SearchNftResponse.newBuilder()
+                    .addAllNftSettingsList(it)
+                    .build()
+            }
+
+
     fun getAllNft(apAddress: String): ListNft.ListNftResponse =
         nftRepository.findAll(apAddress)
             .map {

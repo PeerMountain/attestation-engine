@@ -50,6 +50,12 @@ class NftSettingsRepository(
             .where("? % ANY(STRING_TO_ARRAY(nft_settings.name,' ') || STRING_TO_ARRAY(nft_settings.description,' '))", keywords)
             .fetch { enrichedNftSettings(it) }
 
+    fun findAll(): List<EnrichedNftSettings> =
+        selectFromNftJoinedAttestationProvider()
+            .on(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))
+            .fetch { enrichedNftSettings(it) }
+
+
     fun findAll(apAddress: String): List<EnrichedNftSettings> =
         selectFromNftJoinedAttestationProvider()
             .on(Tables.NFT_SETTINGS.AP_ID.eq(Tables.ATTESTATION_PROVIDER.ID))

@@ -31,7 +31,7 @@ class CashierContractService(
 
     fun nftMint(address: String, request: NftMint.NftMintRequest): TransactionReceipt =
         cashierContractV2.nftMint(
-            BigInteger.ZERO,
+            nonceService.nextNonce(),
             address,
             Numeric.hexStringToByteArray(request.message),
             Numeric.hexStringToByteArray(request.signature)
