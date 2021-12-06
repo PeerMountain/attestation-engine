@@ -65,7 +65,6 @@ class NftSettingsService(
                     .build()
             }
 
-
     fun getAllNft(apAddress: String): ListNft.ListNftResponse =
         nftRepository.findAll(apAddress)
             .map {
