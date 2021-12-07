@@ -10,6 +10,7 @@ import org.web3j.crypto.Sign
 import org.web3j.protocol.core.methods.response.EthSendTransaction
 import org.web3j.utils.Numeric
 import java.util.Optional
+import javax.annotation.PostConstruct
 
 @Service
 class Web3Service(
