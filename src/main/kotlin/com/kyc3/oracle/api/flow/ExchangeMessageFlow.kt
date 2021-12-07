@@ -7,6 +7,7 @@ import com.kyc3.oracle.service.ExchangeKeysHolder
 import com.kyc3.oracle.service.UserKeysService
 import org.jivesoftware.smack.chat2.Chat
 import org.jxmpp.jid.EntityBareJid
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
@@ -16,7 +17,10 @@ class ExchangeMessageFlow(
     private val exchangeKeysHolder: ExchangeKeysHolder
 ) {
 
+    private val log = LoggerFactory.getLogger(javaClass)
+
     fun exchange(from: EntityBareJid, chat: Chat, exchange: Exchange.ExchangeKeysRequest) {
+        log.info("process='ExchangeMessageFlow' message='received keys' from='${from.localpart}'")
         userKeysService.store(
             from.asEntityBareJidString(),
             UserKeys(

@@ -8,6 +8,7 @@ import com.kyc3.oracle.service.SignatureHelper
 import com.kyc3.oracle.service.UserKeysService
 import com.kyc3.oracle.service.Web3Service
 import org.jivesoftware.smack.chat2.Chat
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.Base64
 
@@ -18,6 +19,8 @@ class OracleAPIResponse(
     private val encryptionService: EncryptionService,
     private val userKeysService: UserKeysService,
 ) {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     fun responseDirectly(chat: Chat, message: GeneratedMessageV3) =
         chat.send(encodeMessage(message))
@@ -42,6 +45,11 @@ class OracleAPIResponse(
                     chat.xmppAddressOfChatPartner.asEntityBareJidString()
                 )
                     ?.let { userKeys -> encryptionService.encryptMessage(userKeys.publicEncryptionKey, it) }
+                    .also {
+                        if (it == null) {
+                            log.warn("process='OracleAPIResponse' message='can't find user keys' user=${chat.xmppAddressOfChatPartner.asEntityBareJidString()}")
+                        }
+                    }
             }
             ?.let {
                 Message.EncryptedMessage.newBuilder()
