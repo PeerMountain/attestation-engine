@@ -5,7 +5,6 @@ import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.methods.response.EthGetTransactionReceipt
 import org.web3j.protocol.core.methods.response.EthSendTransaction
 
-
 @Repository
 class Web3Repository(
     private val web3j: Web3j

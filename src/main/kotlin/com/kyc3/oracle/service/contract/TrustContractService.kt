@@ -27,5 +27,4 @@ class TrustContractService(
             .also {
                 log.info("process=CashierContractV2:nftMint tokenId=$tokenId provider=${it.provider} receipt=$it")
             }
-
 }
