@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service
 class NftMintService(
     private val cashierContractService: CashierContractService,
     private val trustContractService: TrustContractService,
-    private val tokenDataRepository: TokenDataRepository
+    private val tokenDataRepository: TokenDataRepository,
+    private val abiDecoder: AbiDecoder,
 ) {
     fun nftMint(
         apAddress: String,
@@ -25,13 +26,19 @@ class NftMintService(
 
         val tokenData = trustContractService.getTokenData(mintedEvent.tokenId.toLong())
 
+        val mintRequest = abiDecoder.decodeMintRequest(request.message)
+        val nftType = mintRequest
+            .let { abiDecoder.decodeNftSettings(it.encodedNftSettings) }.type
+
         tokenDataRepository.insertTokenData(
             TokenDataRecord(
                 null,
                 mintedEvent.holder,
                 mintedEvent.tokenId.toLong(),
+                nftType,
                 mintedEvent.tokenURI,
                 tokenData.keys,
+                mintRequest.encodedNftSettings,
                 tokenData.settings,
                 tokenData.provider,
                 tokenData.data,
@@ -44,9 +51,11 @@ class NftMintService(
                 TokenOuterClass.Token.newBuilder()
                     .setHolder(mintedEvent.holder)
                     .setTokenId(mintedEvent.tokenId.toLong())
+                    .setNftType(nftType)
                     .setTokenUri(mintedEvent.tokenURI)
                     .setKeys(tokenData.keys)
-                    .setSettings(tokenData.settings)
+                    .setSettings(mintRequest.encodedNftSettings)
+                    .setSettingsHash(tokenData.settings)
                     .setProvider(tokenData.provider)
                     .setData(tokenData.data)
             )

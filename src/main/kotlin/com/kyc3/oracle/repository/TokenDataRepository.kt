@@ -15,18 +15,22 @@ class TokenDataRepository(
             .columns(
                 TokenData.TOKEN_DATA.HOLDER,
                 TokenData.TOKEN_DATA.TOKEN_ID,
+                TokenData.TOKEN_DATA.NFT_TYPE,
                 TokenData.TOKEN_DATA.TOKEN_URI,
                 TokenData.TOKEN_DATA.KEYS,
                 TokenData.TOKEN_DATA.SETTINGS,
+                TokenData.TOKEN_DATA.SETTINGS_HASH,
                 TokenData.TOKEN_DATA.PROVIDER,
                 TokenData.TOKEN_DATA.DATA
             )
             .values(
                 tokenDataRecord.holder,
                 tokenDataRecord.tokenId,
+                tokenDataRecord.nftType,
                 tokenDataRecord.tokenUri,
                 tokenDataRecord.keys,
                 tokenDataRecord.settings,
+                tokenDataRecord.settingsHash,
                 tokenDataRecord.provider,
                 tokenDataRecord.data,
             )
@@ -37,8 +41,10 @@ class TokenDataRepository(
             TokenData.TOKEN_DATA.HOLDER,
             TokenData.TOKEN_DATA.TOKEN_ID,
             TokenData.TOKEN_DATA.TOKEN_URI,
+            TokenData.TOKEN_DATA.NFT_TYPE,
             TokenData.TOKEN_DATA.KEYS,
             TokenData.TOKEN_DATA.SETTINGS,
+            TokenData.TOKEN_DATA.SETTINGS_HASH,
             TokenData.TOKEN_DATA.PROVIDER,
             TokenData.TOKEN_DATA.DATA,
         )
@@ -49,9 +55,11 @@ class TokenDataRepository(
                     null,
                     it.get(TokenData.TOKEN_DATA.HOLDER),
                     it.get(TokenData.TOKEN_DATA.TOKEN_ID),
+                    it.get(TokenData.TOKEN_DATA.NFT_TYPE),
                     it.get(TokenData.TOKEN_DATA.TOKEN_URI),
                     it.get(TokenData.TOKEN_DATA.KEYS),
                     it.get(TokenData.TOKEN_DATA.SETTINGS),
+                    it.get(TokenData.TOKEN_DATA.SETTINGS_HASH),
                     it.get(TokenData.TOKEN_DATA.PROVIDER),
                     it.get(TokenData.TOKEN_DATA.DATA),
                 )
