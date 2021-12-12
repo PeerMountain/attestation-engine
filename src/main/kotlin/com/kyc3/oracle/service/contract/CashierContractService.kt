@@ -1,6 +1,7 @@
 package com.kyc3.oracle.service.contract
 
 import com.kyc3.CashierContractV2
+import com.kyc3.oracle.payment.PaymentOuterClass
 import com.kyc3.oracle.service.NonceService
 import com.kyc3.oracle.user.Deposit
 import com.kyc3.oracle.user.NftMint
@@ -38,6 +39,18 @@ class CashierContractService(
             .send()
             .also {
                 log.info("process=CashierContractV2:nftMint apAddress=$address receipt=$it")
+            }
+
+    fun payment(address: String, payment: PaymentOuterClass.Payment): TransactionReceipt =
+        cashierContractV2.payment(
+            nonceService.nextNonce(),
+            address,
+            Numeric.hexStringToByteArray(payment.message),
+            Numeric.hexStringToByteArray(payment.signature)
+        )
+            .send()
+            .also {
+                log.info("process=CashierContractV2:payment customer=$address receipt=$it")
             }
 
     fun getTokenMintedEvent(transactionReceipt: TransactionReceipt): CashierContractV2.NewTokenMintedEventResponse? =
