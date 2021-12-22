@@ -19,7 +19,7 @@ class CashierContractService(
 
     fun deposit(address: String, request: Deposit.DepositRequest): TransactionReceipt =
         cashierContractV2.deposit(
-            nonceService.nextNonce(),
+            nonceService.proofOfWork(),
             address,
             Numeric.hexStringToByteArray(request.message),
             Numeric.hexStringToByteArray(request.signature)
@@ -31,7 +31,7 @@ class CashierContractService(
 
     fun nftMint(address: String, request: NftMint.NftMintRequest): TransactionReceipt =
         cashierContractV2.nftMint(
-            nonceService.nextNonce(),
+            nonceService.proofOfWork(),
             address,
             Numeric.hexStringToByteArray(request.message),
             Numeric.hexStringToByteArray(request.signature)
@@ -43,7 +43,7 @@ class CashierContractService(
 
     fun payment(address: String, payment: PaymentOuterClass.Payment): TransactionReceipt =
         cashierContractV2.payment(
-            nonceService.nextNonce(),
+            nonceService.proofOfWork(),
             address,
             Numeric.hexStringToByteArray(payment.message),
             Numeric.hexStringToByteArray(payment.signature)
@@ -55,4 +55,7 @@ class CashierContractService(
 
     fun getTokenMintedEvent(transactionReceipt: TransactionReceipt): CashierContractV2.NewTokenMintedEventResponse? =
         cashierContractV2.getNewTokenMintedEvents(transactionReceipt).firstOrNull()
+
+    fun leadingZeros(): Long =
+        cashierContractV2.proofOfWork.send().toLong()
 }
