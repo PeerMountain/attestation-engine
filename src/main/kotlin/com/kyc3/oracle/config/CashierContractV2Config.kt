@@ -15,7 +15,7 @@ class CashierContractV2Config(
 ) {
 
     @Bean
-    fun cashierContractV3(web3j: Web3j, credentials: Credentials): CashierContractV2 =
+    fun cashierContractV2(web3j: Web3j, credentials: Credentials): CashierContractV2 =
         CashierContractV2.load(
             contractsProperties.cashier, web3j, credentials,
             StaticGasProvider(

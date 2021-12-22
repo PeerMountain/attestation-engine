@@ -1,12 +1,15 @@
 package com.kyc3.oracle
 
+import com.kyc3.oracle.config.CashierContractV2TestConfig
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
 import org.testcontainers.containers.DockerComposeContainer
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
 import java.io.File
 
 @SpringBootTest
+@Import(CashierContractV2TestConfig::class)
 abstract class AbstractIntegrationTest {
 
     companion object {

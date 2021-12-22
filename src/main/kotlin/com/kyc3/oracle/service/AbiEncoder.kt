@@ -34,6 +34,14 @@ class AbiEncoder(
             )
         )
 
+    fun encodeProofOfWork(address: String, nonce: Long): String =
+        functionEncoder.encodeParameters(
+            listOf(
+                Address(address),
+                Uint256(nonce)
+            )
+        )
+
     fun hexToByte(hexString: String): Bytes2 {
         return Bytes2(
             byteArrayOf(
