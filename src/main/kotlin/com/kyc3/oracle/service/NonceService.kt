@@ -8,6 +8,7 @@ import org.web3j.utils.Numeric
 import java.math.BigInteger
 import java.util.concurrent.atomic.AtomicLong
 import javax.annotation.PostConstruct
+import kotlin.random.Random
 
 @Service
 class NonceService(
@@ -17,12 +18,11 @@ class NonceService(
 ) {
 
     private lateinit var pow: BigInteger
-    private val nonce = AtomicLong(11_000)
 
     fun proofOfWork() = pow
 
     fun nextNonce(): BigInteger =
-        BigInteger.valueOf(nonce.incrementAndGet())
+        BigInteger.valueOf(Random.nextInt().toLong())
 
     @PostConstruct
     fun initializeNonce() {
