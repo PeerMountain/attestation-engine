@@ -17,7 +17,7 @@ class NonceService(
 ) {
 
     private lateinit var pow: BigInteger
-    private val nonce = AtomicLong()
+    private val nonce = AtomicLong(11_000)
 
     fun proofOfWork() = pow
 
