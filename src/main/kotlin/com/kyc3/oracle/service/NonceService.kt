@@ -9,6 +9,7 @@ import java.math.BigInteger
 import java.util.concurrent.atomic.AtomicLong
 import javax.annotation.PostConstruct
 import kotlin.random.Random
+import kotlin.random.nextUInt
 
 @Service
 class NonceService(
@@ -22,7 +23,7 @@ class NonceService(
     fun proofOfWork() = pow
 
     fun nextNonce(): BigInteger =
-        BigInteger.valueOf(Random.nextInt().toLong())
+        BigInteger.valueOf(Random.nextUInt().toLong())
 
     @PostConstruct
     fun initializeNonce() {

@@ -36,7 +36,7 @@ class NftMintService(
                 mintedEvent.holder,
                 mintedEvent.tokenId.toLong(),
                 nftType,
-                String(mintedEvent.tokenURI),
+                mintedEvent.tokenURI,
                 tokenData.keys,
                 mintRequest.encodedNftSettings,
                 tokenData.settings,
@@ -52,7 +52,7 @@ class NftMintService(
                     .setHolder(mintedEvent.holder)
                     .setTokenId(mintedEvent.tokenId.toLong())
                     .setNftType(nftType)
-                    .setTokenUri(String(mintedEvent.tokenURI))
+                    .setTokenUri(mintedEvent.tokenURI)
                     .setKeys(tokenData.keys)
                     .setSettings(mintRequest.encodedNftSettings)
                     .setSettingsHash(tokenData.settings)
