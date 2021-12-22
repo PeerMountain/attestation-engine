@@ -23,9 +23,11 @@ internal class NonceServiceTest {
 
     @Test
     fun `should generate oracle nonce`() {
-        `when`(cashierContractService.proofOfWork).thenReturn(RemoteFunctionCall(null) {
-            BigInteger.valueOf(2)
-        })
+        `when`(cashierContractService.proofOfWork).thenReturn(
+            RemoteFunctionCall(null) {
+                BigInteger.valueOf(2)
+            }
+        )
 
         assertThat(nonceService.generateNonce()).isGreaterThan(0)
     }
