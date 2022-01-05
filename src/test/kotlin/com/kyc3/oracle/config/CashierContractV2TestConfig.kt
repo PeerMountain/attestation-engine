@@ -16,7 +16,7 @@ class CashierContractV2TestConfig {
 
     @Bean
     @Primary
-    fun cashierContractV3(web3j: Web3j, credentials: Credentials): CashierContractV2 =
+    fun testCashierContractV2(web3j: Web3j, credentials: Credentials): CashierContractV2 =
         mock(CashierContractV2::class.java)
             .also {
                 Mockito.`when`(it.proofOfWork).thenReturn(
