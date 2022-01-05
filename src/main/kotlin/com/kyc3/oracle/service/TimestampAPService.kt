@@ -20,7 +20,7 @@ class TimestampAPService(
     private val exchangeKeysHolder: ExchangeKeysHolder
 ) {
 
-    private val jid: EntityBareJid = JidCreate.entityBareFrom("0x3f9dc0e46eb11ec9d91a6a2e1ec1916d5d0d2982@xmpp.kyc3.com")
+    private val jid: EntityBareJid = JidCreate.entityBareFrom("0x80410613b808bf416acc81a677bf8b7da800c842@xmpp.kyc3.com")
     private val chat: Chat = chatManager.chatWith(jid)
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -44,7 +44,7 @@ class TimestampAPService(
         )
 
     fun sendToProvider(message: GeneratedMessageV3): Unit =
-        userKeysService.getUserKeys("0x3f9dc0e46eb11ec9d91a6a2e1ec1916d5d0d2982@xmpp.kyc3.com".lowercase())
+        userKeysService.getUserKeys("0x80410613b808bf416acc81a677bf8b7da800c842@xmpp.kyc3.com".lowercase())
             ?.let {
                 oracleAPIResponse.responseToClient(chat, message)
             }
