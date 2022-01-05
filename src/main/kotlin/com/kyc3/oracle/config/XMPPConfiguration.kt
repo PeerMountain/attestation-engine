@@ -8,16 +8,16 @@ import org.jivesoftware.smack.chat2.ChatManager
 import org.jivesoftware.smack.websocket.XmppWebSocketTransportModuleDescriptor
 import org.jivesoftware.smackx.admin.ServiceAdministrationManager
 import org.jxmpp.jid.impl.JidCreate
-import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 import org.web3j.crypto.Credentials
 
 @Configuration
+@Profile("!test")
 class XMPPConfiguration(
     val xmppProperties: XmppProperties
 ) {
-    private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
     fun connectionConfiguration(
@@ -66,7 +66,6 @@ class XMPPConfiguration(
             }
             .build()
 
-    @Bean
     fun connection(
         connectionConfiguration: ModularXmppClientToServerConnectionConfiguration
     ): XMPPConnection =
@@ -77,22 +76,12 @@ class XMPPConfiguration(
             }
 
     @Bean
-    fun adminConnection(
-        adminConnectionConfiguration: ModularXmppClientToServerConnectionConfiguration
-    ): XMPPConnection =
-        ModularXmppClientToServerConnection(adminConnectionConfiguration)
-            .also {
-                it.connect()
-                it.login()
-            }
-
-    @Bean
-    fun chatManager(connection: XMPPConnection): ChatManager =
-        ChatManager.getInstanceFor(connection)
+    fun chatManager(connectionConfiguration: ModularXmppClientToServerConnectionConfiguration): ChatManager =
+        ChatManager.getInstanceFor(connection(connectionConfiguration))
 
     @Bean
     fun serviceAdministrationManager(
-        adminConnection: XMPPConnection
+        adminConnectionConfiguration: ModularXmppClientToServerConnectionConfiguration
     ): ServiceAdministrationManager =
-        ServiceAdministrationManager(adminConnection)
+        ServiceAdministrationManager(connection(adminConnectionConfiguration))
 }

@@ -1,15 +1,18 @@
 package com.kyc3.oracle
 
 import com.kyc3.oracle.config.CashierContractV2TestConfig
+import com.kyc3.oracle.config.XMPPTestConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
+import org.springframework.test.context.ActiveProfiles
 import org.testcontainers.containers.DockerComposeContainer
 import org.testcontainers.containers.PostgreSQLContainer
 import org.testcontainers.utility.DockerImageName
 import java.io.File
 
 @SpringBootTest
-@Import(CashierContractV2TestConfig::class)
+@Import(CashierContractV2TestConfig::class, XMPPTestConfiguration::class)
+@ActiveProfiles("test")
 abstract class AbstractIntegrationTest {
 
     companion object {
