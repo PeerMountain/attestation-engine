@@ -13,5 +13,5 @@ class UserKeysService(
         cache.put(address.lowercase(), userKeys)
 
     fun getUserKeys(address: String): UserKeys? =
-        cache.get(address)
+        cache.get(address.lowercase())
 }
