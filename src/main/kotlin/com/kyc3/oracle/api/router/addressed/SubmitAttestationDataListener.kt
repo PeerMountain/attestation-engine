@@ -17,7 +17,7 @@ class SubmitAttestationDataListener(
     override fun type(): Class<SubmitAttestation.SubmitAttestationDataRequest> =
         SubmitAttestation.SubmitAttestationDataRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): SignAttestation.SignAttestationDataResponse =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): SignAttestation.SignAttestationDataResponse =
         event.message.unpack(type())
             .let {
                 attestationDataService.submitAttestationData(

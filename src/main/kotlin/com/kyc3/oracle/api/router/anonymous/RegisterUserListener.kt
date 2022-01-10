@@ -18,7 +18,7 @@ class RegisterUserListener(
     override fun type(): Class<Register.RegisterUserRequest> =
         Register.RegisterUserRequest::class.java
 
-    override fun accept(event: Message.SignedAnonymousMessage, chat: Chat): Register.RegisterUserResponse? =
+    override fun acceptSync(event: Message.SignedAnonymousMessage, chat: Chat): Register.RegisterUserResponse? =
         event.message.unpack(type()).let { request ->
             userLoginChallengeService.userLoginChallengeByAddress(request.address)
                 ?.takeIf { web3Service.verifySignature(it.challenge, request.signedChallenge, request.address) }

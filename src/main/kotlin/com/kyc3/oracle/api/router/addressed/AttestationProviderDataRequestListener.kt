@@ -22,7 +22,7 @@ class AttestationProviderDataRequestListener(
     override fun type(): Class<Data.AttestationProviderDataRequest> =
         Data.AttestationProviderDataRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): Data.AttestationProviderDataResponse =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): Data.AttestationProviderDataResponse =
         event.message.unpack(type()).address
             .let { attestationProviderService.getProviderByAddress(it) }
             ?.let {

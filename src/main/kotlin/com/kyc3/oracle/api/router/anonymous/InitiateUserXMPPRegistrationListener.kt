@@ -15,7 +15,7 @@ class InitiateUserXMPPRegistrationListener(
     override fun type(): Class<Register.InitiateUserXMPPRegistrationRequest> =
         Register.InitiateUserXMPPRegistrationRequest::class.java
 
-    override fun accept(
+    override fun acceptSync(
         event: Message.SignedAnonymousMessage,
         chat: Chat
     ): Register.InitiateUserXMPPRegistrationResponse? =

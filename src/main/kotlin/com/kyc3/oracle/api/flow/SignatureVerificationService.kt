@@ -7,6 +7,7 @@ import com.kyc3.oracle.service.Web3Service
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.Base64
+import java.util.concurrent.CompletableFuture
 
 @Service
 class SignatureVerificationService(
@@ -15,43 +16,49 @@ class SignatureVerificationService(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun verify(from: String, message: Message.SignedMessage): ErrorDtoOuterClass.ErrorDto? =
+    fun verify(from: String, message: Message.SignedMessage): CompletableFuture<ErrorDtoOuterClass.ErrorDto?> =
         when (message.bodyCase) {
             Message.SignedMessage.BodyCase.ANONYMOUS -> verifyAnonymous(message.anonymous)
             Message.SignedMessage.BodyCase.ADDRESSED -> verifyAddressed(from, message.addressed)
-            else -> ErrorDtoOuterClass.ErrorDto.newBuilder()
-                .setMessage("Invalid message signature")
-                .build()
-        }
-
-    private fun verifyAnonymous(message: Message.SignedAnonymousMessage): ErrorDtoOuterClass.ErrorDto? =
-        if (!validSignature(message)) {
-            if (messageIsError(message.message)) {
-                null
-            } else {
+            else -> CompletableFuture.completedFuture(
                 ErrorDtoOuterClass.ErrorDto.newBuilder()
                     .setMessage("Invalid message signature")
                     .build()
+            )
+        }
+
+    private fun verifyAnonymous(message: Message.SignedAnonymousMessage): CompletableFuture<ErrorDtoOuterClass.ErrorDto?> =
+        if (!validSignature(message)) {
+            if (messageIsError(message.message)) {
+                CompletableFuture.completedFuture(null as ErrorDtoOuterClass.ErrorDto?)
+            } else {
+                CompletableFuture.completedFuture(
+                    ErrorDtoOuterClass.ErrorDto.newBuilder()
+                        .setMessage("Invalid message signature")
+                        .build()
+                )
             }
         } else {
-            null
+            CompletableFuture.completedFuture(null as ErrorDtoOuterClass.ErrorDto?)
         }
 
     private fun verifyAddressed(
         from: String,
         message: Message.SignedAddressedMessage
-    ): ErrorDtoOuterClass.ErrorDto? =
+    ): CompletableFuture<ErrorDtoOuterClass.ErrorDto?> =
         if (!validSignature(from, message)) {
             if (messageIsError(message.message)) {
-                null
+                CompletableFuture.completedFuture(null as ErrorDtoOuterClass.ErrorDto?)
             } else {
                 log.info("process='SignatureVerificationService' message='invalid signature from user' type=")
-                ErrorDtoOuterClass.ErrorDto.newBuilder()
-                    .setMessage("Invalid message signature")
-                    .build()
+                CompletableFuture.completedFuture(
+                    ErrorDtoOuterClass.ErrorDto.newBuilder()
+                        .setMessage("Invalid message signature")
+                        .build()
+                )
             }
         } else {
-            null
+            CompletableFuture.completedFuture(null as ErrorDtoOuterClass.ErrorDto?)
         }
 
     private fun messageIsError(message: Any) =

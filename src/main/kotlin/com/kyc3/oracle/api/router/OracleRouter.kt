@@ -6,6 +6,7 @@ import com.kyc3.Message
 import org.jivesoftware.smack.chat2.Chat
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.util.concurrent.CompletableFuture
 
 @Service
 class OracleRouter(
@@ -14,7 +15,7 @@ class OracleRouter(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun route(message: Message.SignedMessage, chat: Chat): GeneratedMessageV3? =
+    fun route(message: Message.SignedMessage, chat: Chat): CompletableFuture<out GeneratedMessageV3?> =
         try {
             when (message.bodyCase) {
                 Message.SignedMessage.BodyCase.ADDRESSED ->
@@ -29,7 +30,7 @@ class OracleRouter(
             }
         } catch (ex: RuntimeException) {
             log.warn("Exception during message processing", ex)
-            null
+            CompletableFuture.completedFuture(null as GeneratedMessageV3?)
         }
 
     private fun <T : GeneratedMessageV3> route(
@@ -45,4 +46,5 @@ class OracleRouter(
         }
         ?.also { log.info("process='OracleRouter.route' type='${it.type()}' typeUrl=${bodySupplier().typeUrl}") }
         ?.accept(signedMessageSupplier(), chat)
+        ?: CompletableFuture.completedFuture(null)
 }

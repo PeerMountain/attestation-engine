@@ -6,6 +6,7 @@ import com.kyc3.oracle.service.contract.CashierContractService
 import com.kyc3.oracle.user.Deposit
 import org.jivesoftware.smack.chat2.Chat
 import org.springframework.stereotype.Component
+import java.util.concurrent.CompletableFuture
 
 @Component
 class DepositRequestListener(
@@ -15,12 +16,12 @@ class DepositRequestListener(
     override fun type(): Class<Deposit.DepositRequest> =
         Deposit.DepositRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): Deposit.DepositResponse? =
+    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): CompletableFuture<Deposit.DepositResponse> =
         cashierContractService.deposit(
             chat.xmppAddressOfChatPartner.localpart.asUnescapedString(),
             event.message.unpack(type())
         )
-            .let {
+            .thenApply {
                 Deposit.DepositResponse.newBuilder()
                     .setDepositTransactionHash(it.transactionHash)
                     .build()

@@ -8,6 +8,7 @@ import com.kyc3.oracle.service.TimestampAPService
 import com.kyc3.oracle.user.ChallengeSigned
 import org.jivesoftware.smack.chat2.Chat
 import org.springframework.stereotype.Component
+import java.util.concurrent.CompletableFuture
 
 @Component
 class ChallengeSignedListener(
@@ -18,24 +19,22 @@ class ChallengeSignedListener(
     override fun type(): Class<ChallengeSigned.ChallengeSignedRequest> =
         ChallengeSigned.ChallengeSignedRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): ChallengeSigned.ChallengeSignedResponse? {
+    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): CompletableFuture<ChallengeSigned.ChallengeSignedResponse> =
         event.message.unpack(type())
-            .also {
+            .let { challenge ->
                 paymentService.handleUserPayment(
                     chat.xmppAddressOfChatPartner.localpart.asUnescapedString(),
-                    it.payment
+                    challenge.payment
                 )
+                    .thenApply {
+                        VerifyChallenge.VerifyChallengeRequest.newBuilder()
+                            .setChallenge(challenge.challenge)
+                            .setSignedChallenge(challenge.signedChallenge)
+                            .setUserAddress(challenge.userAddress)
+                            .setUserPublicKey(event.publicKey)
+                            .build()
+                    }
+                    .thenAccept { timestampAPService.sendToProvider(it) }
+                    .thenApply { null }
             }
-            .let {
-                VerifyChallenge.VerifyChallengeRequest.newBuilder()
-                    .setChallenge(it.challenge)
-                    .setSignedChallenge(it.signedChallenge)
-                    .setUserAddress(it.userAddress)
-                    .setUserPublicKey(event.publicKey)
-                    .build()
-            }
-            .let { timestampAPService.sendToProvider(it) }
-
-        return null
-    }
 }
