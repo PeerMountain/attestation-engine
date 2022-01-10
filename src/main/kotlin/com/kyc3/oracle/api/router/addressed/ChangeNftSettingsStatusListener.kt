@@ -19,7 +19,7 @@ class ChangeNftSettingsStatusListener(
     override fun type(): Class<ChangeNftStatus.ChangeNftSettingsStatusRequest> =
         ChangeNftStatus.ChangeNftSettingsStatusRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): ChangeNftStatus.ChangeNftSettingsStatusResponse =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): ChangeNftStatus.ChangeNftSettingsStatusResponse =
         nftSettingsService.changeNftStatus(event.message.unpack(type()))
             .takeIf { it }
             ?.let {

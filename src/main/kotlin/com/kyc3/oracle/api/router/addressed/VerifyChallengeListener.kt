@@ -16,7 +16,7 @@ class VerifyChallengeListener(
     override fun type(): Class<VerifyChallenge.VerifyChallengeResponse> =
         VerifyChallenge.VerifyChallengeResponse::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): VerifyChallenge.VerifyChallengeResponse? {
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): VerifyChallenge.VerifyChallengeResponse? {
         event.message.unpack(type())
             .let {
                 oracleFrontService.sendToFrontend(

@@ -7,6 +7,7 @@ import com.kyc3.oracle.api.router.OracleRouter
 import org.jivesoftware.smack.chat2.Chat
 import org.jxmpp.jid.EntityBareJid
 import org.springframework.stereotype.Service
+import java.util.concurrent.CompletableFuture
 
 @Service
 class EncryptedMessageFlow(
@@ -24,14 +25,28 @@ class EncryptedMessageFlow(
         doIfValid(from.asEntityBareJidString(), signedMessage) { signed ->
             oracleRouter.route(signed, chat)
         }
-            ?.let { oracleAPIResponse.responseToClient(chat, it) }
+            .let { future ->
+                future.thenAccept {
+                    it?.also {
+                        oracleAPIResponse.responseToClient(chat, it)
+                    }
+                }
+            }
     }
 
     private fun doIfValid(
         from: String,
         message: Message.SignedMessage,
-        consumer: (Message.SignedMessage) -> GeneratedMessageV3?
-    ) =
+        consumer: (Message.SignedMessage) -> CompletableFuture<out GeneratedMessageV3?>
+    ): CompletableFuture<out GeneratedMessageV3?> =
         signatureVerificationService.verify(from, message)
-            ?: consumer(message)
+            .thenCompose {
+                if (it != null) {
+                    val completedFuture: CompletableFuture<out GeneratedMessageV3?> =
+                        CompletableFuture.completedFuture(it)
+                    completedFuture
+                } else {
+                    consumer(message)
+                }
+            }
 }

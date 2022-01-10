@@ -17,7 +17,7 @@ class AttestationProviderRegisterListener(
     override fun type(): Class<Register.RegisterAttestationProviderRequest> =
         Register.RegisterAttestationProviderRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): Register.RegisterAttestationProviderResponse =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): Register.RegisterAttestationProviderResponse =
         event.message.unpack(type())
             .also {
                 log.info("process='AttestationProviderListener' message='received message' event='$it'")

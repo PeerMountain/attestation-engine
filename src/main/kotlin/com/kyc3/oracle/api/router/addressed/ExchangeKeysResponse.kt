@@ -18,7 +18,7 @@ class ExchangeKeysResponse(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): Exchange.ExchangeKeysResponse? =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): Exchange.ExchangeKeysResponse? =
         event.message.unpack(type())
             .let {
                 log.info("process='ExchangeMessageFlow' message='received keys' from='${chat.xmppAddressOfChatPartner.localpart}'")

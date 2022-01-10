@@ -15,7 +15,7 @@ class LoginChallengeListener(
     override fun type(): Class<LoginChallenge.LoginChallengeRequest> =
         LoginChallenge.LoginChallengeRequest::class.java
 
-    override fun accept(event: Message.SignedAnonymousMessage, chat: Chat): LoginChallenge.LoginChallengeResponse? =
+    override fun acceptSync(event: Message.SignedAnonymousMessage, chat: Chat): LoginChallenge.LoginChallengeResponse? =
         event.message.unpack(type()).address.let { address ->
             userLoginChallengeService.userLoginChallengeByAddress(address).let {
                 LoginChallenge.LoginChallengeResponse.newBuilder()

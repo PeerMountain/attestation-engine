@@ -14,7 +14,7 @@ class CreateNftSettingsListener(
     override fun type(): Class<CreateNft.CreateNftRequest> =
         CreateNft.CreateNftRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): CreateNft.CreateNftResponse =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): CreateNft.CreateNftResponse =
         nftService.createNft(event.message.unpack(type()))
             .let { CreateNft.CreateNftResponse.getDefaultInstance() }
 }

@@ -14,7 +14,7 @@ class ErrorDtoListener : OracleAddressedListener<ErrorDtoOuterClass.ErrorDto, Er
     override fun type(): Class<ErrorDtoOuterClass.ErrorDto> =
         ErrorDtoOuterClass.ErrorDto::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): ErrorDtoOuterClass.ErrorDto? {
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): ErrorDtoOuterClass.ErrorDto? {
         log.warn("Received an event with invalid signature")
         return null
     }

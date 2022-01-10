@@ -14,7 +14,7 @@ class Erc20MintListener(
     override fun type(): Class<Erc20.Erc20MintRequest> =
         Erc20.Erc20MintRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): Erc20.Erc20MintResponse? =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): Erc20.Erc20MintResponse =
         event.message.unpack(type())
             .let {
                 web3Service.sendRawTransaction(it.signedTransaction)

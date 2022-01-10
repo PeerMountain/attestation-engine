@@ -15,7 +15,7 @@ class AttestationProviderListListener(
     override fun type(): Class<ApList.AttestationProviderListRequest> =
         ApList.AttestationProviderListRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): ApList.AttestationProviderListResponse =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): ApList.AttestationProviderListResponse =
         attestationProviderService.findConfirmedProviders()
             .map {
                 AttestationProviderOuterClass.AttestationProvider.newBuilder()

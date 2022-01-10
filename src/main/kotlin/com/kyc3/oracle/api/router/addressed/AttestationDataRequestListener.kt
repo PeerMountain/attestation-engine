@@ -17,7 +17,7 @@ class AttestationDataRequestListener(
     override fun type(): Class<RequestAttestationList.AttestationDataListRequest> =
         RequestAttestationList.AttestationDataListRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): RequestAttestationList.AttestationDataListResponse =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): RequestAttestationList.AttestationDataListResponse =
         event.message.unpack(type())
             .let {
                 attestationDataService.findUserAttestations(it.customerAddress)

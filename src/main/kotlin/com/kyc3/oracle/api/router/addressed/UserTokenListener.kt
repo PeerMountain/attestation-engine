@@ -15,7 +15,7 @@ class UserTokenListener(
     override fun type(): Class<UserToken.UserTokenRequest> =
         UserToken.UserTokenRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): UserToken.UserTokenResponse? =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): UserToken.UserTokenResponse =
         UserToken.UserTokenResponse.newBuilder()
             .addAllTokens(
                 tokenDataRepository.findAllByHolder(

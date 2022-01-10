@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.web3j.utils.Numeric
 import java.math.BigInteger
+import java.util.concurrent.CompletableFuture
 
 @Service
 class TrustContractService(
@@ -13,10 +14,10 @@ class TrustContractService(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun getTokenData(tokenId: Long): ContractTokenDataDto =
+    fun getTokenData(tokenId: Long): CompletableFuture<ContractTokenDataDto> =
         trustContract.getTokenData(BigInteger.valueOf(tokenId))
-            .send()
-            .let {
+            .sendAsync()
+            .thenApply {
                 ContractTokenDataDto(
                     Numeric.toHexString(it.component1()),
                     Numeric.toHexString(it.component2()),
@@ -24,7 +25,11 @@ class TrustContractService(
                     Numeric.toHexString(it.component4())
                 )
             }
-            .also {
-                log.info("process=CashierContractV2:nftMint tokenId=$tokenId provider=${it.provider} receipt=$it")
+            .whenComplete { receipt, ex ->
+                if (ex == null) {
+                    log.info("process=CashierContractV2:nftMint tokenId=$tokenId provider=${receipt.provider} receipt=$receipt")
+                } else {
+                    log.error("process=CashierContractV2:nftMint tokenId=$tokenId", ex)
+                }
             }
 }

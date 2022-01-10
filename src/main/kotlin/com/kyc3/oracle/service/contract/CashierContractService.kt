@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.web3j.protocol.core.methods.response.TransactionReceipt
 import org.web3j.utils.Numeric
+import java.util.concurrent.CompletableFuture
 
 @Service
 class CashierContractService(
@@ -17,40 +18,52 @@ class CashierContractService(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun deposit(address: String, request: Deposit.DepositRequest): TransactionReceipt =
+    fun deposit(address: String, request: Deposit.DepositRequest): CompletableFuture<TransactionReceipt> =
         cashierContractV2.deposit(
             nonceService.proofOfWork(),
             address,
             Numeric.hexStringToByteArray(request.message),
             Numeric.hexStringToByteArray(request.signature)
         )
-            .send()
-            .also {
-                log.info("process=CashierContractV2:deposit account=$address receipt=$it")
+            .sendAsync()
+            .whenComplete { receipt, ex ->
+                if (ex == null) {
+                    log.info("process=CashierContractV2:deposit account=$address receipt=$receipt")
+                } else {
+                    log.error("process=CashierContractV2:deposit account=$address", ex)
+                }
             }
 
-    fun nftMint(address: String, request: NftMint.NftMintRequest): TransactionReceipt =
+    fun nftMint(address: String, request: NftMint.NftMintRequest): CompletableFuture<TransactionReceipt> =
         cashierContractV2.nftMint(
             nonceService.proofOfWork(),
             address,
             Numeric.hexStringToByteArray(request.message),
             Numeric.hexStringToByteArray(request.signature)
         )
-            .send()
-            .also {
-                log.info("process=CashierContractV2:nftMint apAddress=$address receipt=$it")
+            .sendAsync()
+            .whenComplete { receipt, ex ->
+                if (ex == null) {
+                    log.info("process=CashierContractV2:nftMint apAddress=$address receipt=$receipt")
+                } else {
+                    log.error("process=CashierContractV2:nftMint apAddress=$address", ex)
+                }
             }
 
-    fun payment(address: String, payment: PaymentOuterClass.Payment): TransactionReceipt =
+    fun payment(address: String, payment: PaymentOuterClass.Payment): CompletableFuture<TransactionReceipt> =
         cashierContractV2.payment(
             nonceService.proofOfWork(),
             address,
             Numeric.hexStringToByteArray(payment.message),
             Numeric.hexStringToByteArray(payment.signature)
         )
-            .send()
-            .also {
-                log.info("process=CashierContractV2:payment customer=$address receipt=$it")
+            .sendAsync()
+            .whenComplete { receipt, ex ->
+                if (ex == null) {
+                    log.info("process=CashierContractV2:payment customer=$address receipt=$receipt")
+                } else {
+                    log.error("process=CashierContractV2:payment customer=$address", ex)
+                }
             }
 
     fun getTokenMintedEvent(transactionReceipt: TransactionReceipt): CashierContractV2.NewTokenMintedEventResponse? =

@@ -14,7 +14,7 @@ class SearchListNftSettingsListener(
     override fun type(): Class<SearchNft.SearchNftRequest> =
         SearchNft.SearchNftRequest::class.java
 
-    override fun accept(event: Message.SignedAddressedMessage, chat: Chat): SearchNft.SearchNftResponse =
+    override fun acceptSync(event: Message.SignedAddressedMessage, chat: Chat): SearchNft.SearchNftResponse =
         event.message.unpack(type())
             .let {
                 if (it.keywords.isBlank()) {
