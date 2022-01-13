@@ -126,7 +126,7 @@ val startPostgresContainer by tasks.creating(DockerStartContainer::class) {
     dependsOn(createPostgresContainer)
     targetContainerId(createPostgresContainer.getContainerId())
     doLast {
-        sleep(20 * 1000)
+        sleep(50 * 1000)
     }
 }
 
