@@ -73,7 +73,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
     implementation("com.kyc3:oracle-definitions:8bfa4f3")
-    implementation("com.kyc3:attestation-engine-api:afafc96")
+    implementation("com.kyc3:attestation-engine-api:d464966")
 
     runtimeOnly("org.postgresql:postgresql")
 
