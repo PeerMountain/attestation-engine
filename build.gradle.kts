@@ -72,7 +72,8 @@ dependencies {
     implementation("org.web3j:core:5.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
-    implementation("com.kyc3:oracle-definitions:b220af7")
+    implementation("com.kyc3:oracle-definitions:8bfa4f3")
+    implementation("com.kyc3:attestation-engine-api:afafc96")
 
     runtimeOnly("org.postgresql:postgresql")
 
@@ -125,7 +126,7 @@ val startPostgresContainer by tasks.creating(DockerStartContainer::class) {
     dependsOn(createPostgresContainer)
     targetContainerId(createPostgresContainer.getContainerId())
     doLast {
-        sleep(50 * 1000)
+        sleep(20 * 1000)
     }
 }
 

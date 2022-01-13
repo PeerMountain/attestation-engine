@@ -2,7 +2,8 @@ package com.kyc3.oracle.api.flow
 
 import com.google.protobuf.GeneratedMessageV3
 import com.kyc3.Message
-import com.kyc3.oracle.api.OracleAPIResponse
+import com.kyc3.oracle.api.APIResponseService
+import com.kyc3.oracle.api.EncryptionService
 import com.kyc3.oracle.api.router.OracleRouter
 import org.jivesoftware.smack.chat2.Chat
 import org.jxmpp.jid.EntityBareJid
@@ -13,13 +14,13 @@ import java.util.concurrent.CompletableFuture
 class EncryptedMessageFlow(
     private val oracleRouter: OracleRouter,
     private val messageParser: MessageParser,
-    private val messageDecryptService: EncryptionService,
-    private val oracleAPIResponse: OracleAPIResponse,
+    private val messageEncryptionService: EncryptionService,
+    private val apiResponse: APIResponseService,
     private val signatureVerificationService: SignatureVerificationService,
 ) {
 
     fun encryptedMessage(from: EntityBareJid, chat: Chat, message: Message.EncryptedMessage) {
-        val decryptedMessage = messageDecryptService.decryptMessage(message)
+        val decryptedMessage = messageEncryptionService.decryptMessage(message)
         val signedMessage = messageParser.parseSignedMessage(String(decryptedMessage))
 
         doIfValid(from.asEntityBareJidString(), signedMessage) { signed ->
@@ -28,7 +29,7 @@ class EncryptedMessageFlow(
             .let { future ->
                 future.thenAccept {
                     it?.also {
-                        oracleAPIResponse.responseToClient(chat, it)
+                        apiResponse.responseToClient(chat, it)
                     }
                 }
             }

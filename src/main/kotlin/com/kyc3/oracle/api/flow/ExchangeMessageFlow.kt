@@ -1,7 +1,7 @@
 package com.kyc3.oracle.api.flow
 
 import com.kyc3.Exchange
-import com.kyc3.oracle.api.OracleAPIResponse
+import com.kyc3.oracle.api.APIResponseService
 import com.kyc3.oracle.model.UserKeys
 import com.kyc3.oracle.service.ExchangeKeysHolder
 import com.kyc3.oracle.service.UserKeysService
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class ExchangeMessageFlow(
-    private val apiResponse: OracleAPIResponse,
+    private val apiResponse: APIResponseService,
     private val userKeysService: UserKeysService,
     private val exchangeKeysHolder: ExchangeKeysHolder
 ) {
