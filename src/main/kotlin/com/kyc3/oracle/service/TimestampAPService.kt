@@ -3,7 +3,7 @@ package com.kyc3.oracle.service
 import com.google.protobuf.GeneratedMessageV3
 import com.kyc3.Message
 import com.kyc3.ap.challenge.GenerateChallenge
-import com.kyc3.oracle.api.OracleAPIResponse
+import com.kyc3.oracle.api.APIResponseService
 import org.jivesoftware.smack.chat2.Chat
 import org.jivesoftware.smack.chat2.ChatManager
 import org.jxmpp.jid.EntityBareJid
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping
 
 @Service
 class TimestampAPService(
-    private val oracleAPIResponse: OracleAPIResponse,
+    private val apiResponse: APIResponseService,
     chatManager: ChatManager,
     private val userKeysService: UserKeysService,
     private val exchangeKeysHolder: ExchangeKeysHolder
@@ -26,7 +26,7 @@ class TimestampAPService(
 
     @PostMapping
     fun getApPublicKey() {
-        oracleAPIResponse.responseDirectly(
+        apiResponse.responseDirectly(
             chat,
             Message.GeneralMessage.newBuilder()
                 .setExchange(exchangeKeysHolder.generateExchangeMessageRequest())
@@ -46,7 +46,7 @@ class TimestampAPService(
     fun sendToProvider(message: GeneratedMessageV3): Unit =
         userKeysService.getUserKeys("0x80410613b808bf416acc81a677bf8b7da800c842@xmpp.kyc3.com".lowercase())
             ?.let {
-                oracleAPIResponse.responseToClient(chat, message)
+                apiResponse.responseToClient(chat, message)
             }
             ?: run {
                 log.warn("AP public keys are not initialized")
