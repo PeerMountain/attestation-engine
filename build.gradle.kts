@@ -72,8 +72,8 @@ dependencies {
     implementation("org.web3j:core:5.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
-    implementation("com.kyc3:oracle-definitions:8bfa4f3")
-    implementation("com.kyc3:attestation-engine-api:d464966")
+    implementation("com.kyc3:oracle-definitions:f43c6ab")
+    implementation("com.kyc3:attestation-engine-api:f890d7c")
 
     runtimeOnly("org.postgresql:postgresql")
 
