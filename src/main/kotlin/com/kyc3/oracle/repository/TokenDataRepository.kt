@@ -1,6 +1,5 @@
 package com.kyc3.oracle.repository
 
-import com.kyc3.oracle.nft.TokenOuterClass
 import com.kyc3.oracle.types.tables.TokenData
 import com.kyc3.oracle.types.tables.records.TokenDataRecord
 import org.jooq.DSLContext

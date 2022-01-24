@@ -55,12 +55,11 @@ class AbiDecoder(
             .let {
                 TransferRequest(
                     address = it[0].value as String,
-                    tokenId = it[1].value.let { value -> value as BigInteger}.toLong(),
-                    nonce = it[2].value.let { value -> value as BigInteger},
+                    tokenId = it[1].value.let { value -> value as BigInteger }.toLong(),
+                    nonce = it[2].value.let { value -> value as BigInteger },
                     cashierAddress = it[3].value as String,
                 )
             }
-
 
     fun decodeNftSettings(encodedRequest: String): DecodedNftSettings =
         functionDecoder.decodeFunctionResult(
