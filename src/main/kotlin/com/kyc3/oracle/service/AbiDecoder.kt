@@ -2,6 +2,7 @@ package com.kyc3.oracle.service
 
 import com.kyc3.oracle.model.DecodedNftSettings
 import com.kyc3.oracle.model.MintRequest
+import com.kyc3.oracle.model.TransferRequest
 import org.springframework.stereotype.Service
 import org.web3j.abi.DefaultFunctionReturnDecoder
 import org.web3j.abi.TypeReference
@@ -40,6 +41,26 @@ class AbiDecoder(
                     Numeric.toHexString(it[5].value as ByteArray),
                 )
             }
+
+    fun decodeTransferRequest(encodedRequest: String): TransferRequest =
+        functionDecoder.decodeFunctionResult(
+            encodedRequest,
+            listOf(
+                object : TypeReference<Address>() {},
+                object : TypeReference<Uint256>() {},
+                object : TypeReference<Uint256>() {},
+                object : TypeReference<Address>() {},
+            ) as List<TypeReference<Type<Any>>>
+        )
+            .let {
+                TransferRequest(
+                    address = it[0].value as String,
+                    tokenId = it[1].value.let { value -> value as BigInteger}.toLong(),
+                    nonce = it[2].value.let { value -> value as BigInteger},
+                    cashierAddress = it[3].value as String,
+                )
+            }
+
 
     fun decodeNftSettings(encodedRequest: String): DecodedNftSettings =
         functionDecoder.decodeFunctionResult(

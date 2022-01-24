@@ -5,6 +5,7 @@ import com.kyc3.oracle.payment.PaymentOuterClass
 import com.kyc3.oracle.service.NonceService
 import com.kyc3.oracle.user.Deposit
 import com.kyc3.oracle.user.NftMint
+import com.kyc3.oracle.user.NftTransfer
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.web3j.protocol.core.methods.response.TransactionReceipt
@@ -47,6 +48,25 @@ class CashierContractService(
                     log.info("process=CashierContractV2:nftMint apAddress=$address receipt=$receipt")
                 } else {
                     log.error("process=CashierContractV2:nftMint apAddress=$address", ex)
+                }
+            }
+
+    fun nftTransfer(
+        address: String,
+        request: NftTransfer.NftTransferRequest
+    ): CompletableFuture<TransactionReceipt> =
+        cashierContractV2.nftTransfer(
+            nonceService.proofOfWork(),
+            address,
+            Numeric.hexStringToByteArray(request.message),
+            Numeric.hexStringToByteArray(request.signature),
+        )
+            .sendAsync()
+            .whenComplete { receipt, ex ->
+                if (ex == null) {
+                    log.info("process=CashierContractV2:nftTransfer customer=$address receipt=$receipt")
+                } else {
+                    log.error("process=CashierContractV2:nftTransfer customer=$address", ex)
                 }
             }
 

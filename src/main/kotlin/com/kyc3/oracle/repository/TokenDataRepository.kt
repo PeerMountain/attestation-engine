@@ -1,5 +1,6 @@
 package com.kyc3.oracle.repository
 
+import com.kyc3.oracle.nft.TokenOuterClass
 import com.kyc3.oracle.types.tables.TokenData
 import com.kyc3.oracle.types.tables.records.TokenDataRecord
 import org.jooq.DSLContext
@@ -34,6 +35,13 @@ class TokenDataRepository(
                 tokenDataRecord.provider,
                 tokenDataRecord.data,
             )
+            .execute()
+
+    fun changeOwnership(tokenId: Long, oldHolder: String, newHolder: String): Int =
+        dsl.update(TokenData.TOKEN_DATA)
+            .set(TokenData.TOKEN_DATA.HOLDER, newHolder)
+            .where(TokenData.TOKEN_DATA.HOLDER.eq(oldHolder))
+            .and(TokenData.TOKEN_DATA.TOKEN_ID.eq(tokenId))
             .execute()
 
     fun findAllByHolder(userAddress: String): List<TokenDataRecord> =
