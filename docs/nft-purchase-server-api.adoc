@@ -1,0 +1,123 @@
+= NFT Purchase Server API
+
+== ERC20
+
+Allow ERC20:
+
+. Request ERC20:allowance:
++
+[source]
+----
+erc20Contract.allowance(userAddress, CashierContractAddress(0xd1A01ccF70Cd5Be98f3DFEB36e8d943260f161db))
+----
+. If allowance > 0, then user should proceed with buying NFT
+. If allowance = 0, then user should a) mint and b) approve
+. ERC20:mint
++
+[source]
+----
+erc20Contract.mint(userAddress, BigInteger.valueOf(10000000000000000))
+----
+User should sign transaction and send signed transaction to the server using Erc20MintRequest
+. ERC20:approve
++
+[source]
+----
+erc20Contract.approve(CashierContractAddress(0xd1A01ccF70Cd5Be98f3DFEB36e8d943260f161db), BigInteger.valueOf(10000000000000000))
+----
+User should sign transaction and send signed transaction to the server using Erc20ApproveRequest
+
+== Cashier Contract Deposit
+
+. Encode function call:
+
+[source,javascript]
+----
+const message = this.encoder.encode(
+    ['uint256', 'uint256', 'address'],
+    [
+        DepositAmount(for example 6000 can be used),
+        getRandomInt(),
+        CashierContractAddress(0xd1A01ccF70Cd5Be98f3DFEB36e8d943260f161db)
+    ],
+);
+----
+. Sign encoded message:
+```
+signature = signPersonalMessage(message)
+```
+. Send DepositRequest
+. Server responds with DepositResponse()
+
+== NFT Purchase
+
+. After receiving Nft list, user needs to pick one
+. Send InitiateNFTPurchaseRequest
+. User receives InitiateNFTPurchaseResponseDto
+. InitiateNFTPurchaseResponseDto contains invoice:
++
+[source]
+----
+export interface Invoice {
+attestationProvider: string,
+price: number
+paymentNonce: number
+cashierAddress: string
+}
+----
+. User signs challenge from InitiateNFTPurchaseResponseDto
+. User sends ChallengeSignedRequest with payment signed:
+. For payment user needs to encode the following values:
++
+[source, javascript]
+----
+const encoded = this.metamaskService.encode(
+    ["address", "uint256", "uint256", "uint256", "address"],
+    [
+        attestationProvider (from invoice),
+        price (from invoice),
+        paymentNonce (from invoice),
+        randomNonce(),
+        CashierContractAddress
+    ]
+    )
+----
+. User receives ChallengeSignedResponse (will be delayed since oracle needs to execute and verify payment
+. ChallengeSignedResponse contains url to redirect
+. Mobile app should open in-app browser and redirect user to that url
+. Users should complete the attestation process. For the only one existing Attestation Provider now we just use simple attestation that only means that user needs to enter attestation name and click attestation
+. After that user can close in-app browser and return to the application
+. Nft purchasing will be done in the background
+
+== NFT Ownership Transfer
+
+. Create and send NftTransferRequest
+
+[source,protobuf]
+----
+message NftTransferRequest {
+ // types: ["address", "uint256", "uint256", "address"]
+ // values: [receiverAddress, tokenId, senderNonce, cashierV2InstanceAddress]
+ string message = 1;
+ string signature = 2;
+}
+----
+
+. The message field is encoded string consisting of the following fields
+.. Received address
+.. tokenId to be transferred
+.. Random int = nonce
+.. Cashier Address
+```
+const message = this.metamaskService.encode(
+    ["address", "uint256", "uint256", "address"],
+    [
+        this.transferTo,
+        token.tokenId,
+        this.getRandomInt(),
+        CashierContractService.cashierContractAddress
+    ]
+)
+```
+.. Signature is the signed message
+
