@@ -1,0 +1,69 @@
+= Server Connection and Authentication Flow
+
+All parties have to authenticate to xmpp server with public address of a wallet it owns
+
+There will be 2 xmpp channels:
+
+* Normal
+* Anonymous
+
+== Anonymous channel connect
+
+First we will need to connect to anonymous channel:
+
+* domain: 'xmpp-anon.kyc3.com',
+* service: 'wss://xmpp-anon.kyc3.com/xmpp-websocket',
+
+JS Example:
+
+[source,javascript]
+----
+export const XMPP_CLIENT: Client = client({
+  domain: 'xmpp-anon.kyc3.com',
+  service: 'wss://xmpp-anon.kyc3.com/xmpp-websocket',
+})
+----
+
+== Algorithm to access normal XMPP channel
+
+. Create and send LoginChallengeRequest
++
+[source, protobuf]
+----
+message LoginChallengeRequest {
+  string address = 1;
+}
+----
+. Response from server would be of LoginChallengeResponse type
++
+[source, protobuf]
+----
+message LoginChallengeResponse {
+  string address = 1;
+  string challenge = 2;
+  bool registered = 3;
+}
+----
+.. If registered true and challenge is not null, then signed challenge should be used as password for xmpp channel:
++
+[source,javascript]
+----
+this.addressedClient = client({
+      domain: 'xmpp.kyc3.com',
+      service: 'wss://xmpp.kyc3.com/xmpp-websocket',
+      password: password,
+      username: username,
+    })
+----
+.. If registered false, then Registration process should be followed
+
+== Algorithm to register in XMPP server
+
+. Send InitiateUserXMPPRegistrationRequest
+. Server will respond with InitiateUserXMPPRegistrationResponse
+. Challenge should be signed
+. Send RegisterUserRequest
+. Server will send confirmation RegisterUserResponse
+. Proceed with Algorithm to access normal xmpp channel or go to 2.a directly
+
+
