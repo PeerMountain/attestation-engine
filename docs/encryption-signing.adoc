@@ -1,0 +1,73 @@
+= Message Signature and Encryption
+
+All messages in the system are signed and encrypted
+
+For creating signature we use private key of the wallet assigned to a party
+All parties have to use their public address as XMPP username. With that any party can verify message signature
+After a message signed all parties encrypt it with an asymmetric algorithm
+
+== Message Signature
+Messages are signed with link:https://en.wikipedia.org/wiki/Elliptic-curve_cryptography[Elliptic Curve Digital Signature Algorithm (ECDSA)]
+Depending on a language a participant uses there would be a different implementation of the signature
+A method similar to link:https://web3js.readthedocs.io/en/v1.2.9/web3-eth.html#sign[web3.eth.sign] should be used:
+
+[source,java]
+----
+Sign.signPrefixedMessage(Numeric.hexStringToByteArray(Hash.sha3String(body)), ecKeyPair)
+----
+
+== Message Verification
+
+All participants can verify signature of a received message
+
+[source,kotlin]
+----
+    signatureData ->
+        Numeric.hexStringToByteArray(Hash.sha3String(body))
+            .let { data ->
+                Sign.signedPrefixedMessageToKey(data, signatureData)
+            }
+    }
+    .let { Keys.getAddress(it) }
+    .let { address.contains(it, true) }
+----
+
+== Message Encryption
+
+For encryption, we use link:http://nacl.cr.yp.to/[NaCl] algorithms
+As an implementation of NaCL we use link:https://doc.libsodium.org/[libsodium] library
+
+In order to use encryption methods from NaCL we need to convert blockchain priv/public keys
+to keys compatible with NaCL:
+
+[source, java]
+----
+SodiumLibrary.cryptoPublicKey(
+    Numeric.hexStringToByteArray(walletProperties.privateKey)
+)
+----
+
+For the final encryption we use the following link:https://docs.metamask.io/guide/rpc-api.html#other-rpc-methods[metamask compatible] algorithm:
+
+[source, kotlin]
+----
+fun encryptMessage(receiverPublicKey: String, data: String): EthEncryptedData {
+        val ephemPublicKey = SodiumLibrary.cryptoBoxKeyPair()
+        val pubKeyUInt8Array = base64Decoder.decode(receiverPublicKey)
+        val nonce = SodiumLibrary.randomBytes(SodiumLibrary.cryptoBoxNonceBytes().toInt())
+
+        val cipherText = SodiumLibrary.cryptoBoxEasy(
+            data.toByteArray(),
+            nonce,
+            pubKeyUInt8Array,
+            ephemPublicKey.privateKey
+        )
+
+        return EthEncryptedData(
+            version = "x25519-xsalsa20-poly1305",
+            nonce = base64Encoder.encodeToString(nonce),
+            ephemPublicKey = base64Encoder.encodeToString(ephemPublicKey.publicKey),
+            cipherText = base64Encoder.encodeToString(cipherText)
+        )
+    }
+----

@@ -1,0 +1,101 @@
+= Message Structure
+
+For defining server API we use protobuf.
+All protobuf definitions are stored in public
+link:https://github.com/PeerMountain/attestation-engine-api[github repo]
+
+== General Message
+
+All participants of the system have to wrap all messages to type called `GeneralMessage`:
+
+[source, protobuf]
+----
+message GeneralMessage {
+  oneof body {
+    ExchangeKeysRequest exchange = 1;
+    EncryptedMessage message = 2;
+  }
+}
+----
+
+When a participant receives an object of the GeneralMessage
+It can be either `EncryptedMessage` or `ExchangeKeysRequest`
+Encryption part is covered in the
+link:./encryption-signing.adoc[following document]
+
+== Signed Message
+
+After decrypting a message participants can compose `SignedMessage` object:
+
+[source,protobuf]
+----
+message SignedMessage {
+  oneof body {
+    SignedAnonymousMessage anonymous = 1;
+    SignedAddressedMessage addressed = 2;
+  }
+}
+----
+
+Depending on the channel a participant uses it would be either `SignedAnonymousMessage` or `SignedAddressedMessage`
+For more information about Addressed and Anonymous channels please refer to
+link:./server-auth-flow.adoc[server-auth-flow document]
+
+== Any message
+
+After composing a signed message, actual request can be accessed with protobuf `Any` type:
+
+[source,protobuf]
+----
+message SignedAnonymousMessage {
+  string signature = 1;
+  string address = 2;
+  string public_key = 3;
+  google.protobuf.Any message = 4;
+}
+----
+
+[source,protobuf]
+----
+message SignedAddressedMessage {
+  string signature = 1;
+  string public_key = 3;
+  google.protobuf.Any message = 4;
+}
+----
+
+Field `message` of type `Any` can be a wrapper for any request(message) defined in
+link:https://github.com/PeerMountain/attestation-engine-api[protobuf definitions]
+
+For example, a participant can wrap the following type into `Any` message:
+
+[source,protbuf]
+----
+message DepositRequest {
+  // types: ["uint256", "uint256", "address"],
+  // values: [depositAmount, nonce, cashierAddress],
+  string message = 1;
+  string signature = 2;
+}
+----
+
+The following example shows how it can be implemented in JavaScript:
+
+[source,javascript]
+----
+// Request Creation
+const request = new DepositRequest()
+request.setMessage(message)
+request.setSignature(signature)
+
+// Wrapping to Any type
+const providerWrapper = new Any();
+providerWrapper.pack(request.serializeBinary(), name, "type.googleapis.com")
+
+// Creating SignedAddressedMessage
+const signedMessage = new SignedMessage()
+const addressed = new SignedAddressedMessage()
+addressed.setMessage(message)
+addressed.setSignature(signature)
+signedMessage.setAddressed(addressed)
+----
