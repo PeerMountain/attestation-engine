@@ -24,7 +24,7 @@ web3:
   host: ${WEB3_HOST:https://public-node.testnet.rsk.co}
 
 libsodium:
-  path: /usr/lib/libsodium.so
+  path: /usr/lib/x86_64-linux-gnu/libsodium.so
 
 contracts:
   cashier: ${CASHIER_CONTRACT_ADDRESS:0x7b7Ec4C333fC5E3D0B4001fC818491A7AE59a407}

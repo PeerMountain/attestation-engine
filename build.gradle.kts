@@ -72,8 +72,8 @@ dependencies {
     implementation("org.web3j:core:5.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.9.1")
 
-    implementation("com.kyc3:oracle-definitions:f43c6ab")
-    implementation("com.kyc3:attestation-engine-api:f890d7c")
+    implementation("com.kyc3:oracle-definitions:befdb55")
+    implementation("com.kyc3:attestation-engine-api:0466e47")
 
     runtimeOnly("org.postgresql:postgresql")
 
@@ -116,9 +116,11 @@ val pullPostgresImage by tasks.creating(DockerPullImage::class.java) {
 val createPostgresContainer by tasks.creating(DockerCreateContainer::class) {
     dependsOn(pullPostgresImage)
     targetImageId("postgres:12")
+    containerName.set("postgres")
     hostConfig.portBindings.set(listOf("5433:5432"))
     hostConfig.autoRemove.set(true)
     withEnvVar("POSTGRES_USER", "oracle")
+    withEnvVar("POSTGRES_DB", "oracle")
     withEnvVar("POSTGRES_PASSWORD", "oracle")
 }
 
