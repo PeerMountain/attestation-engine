@@ -1,0 +1,35 @@
+= Deploy Attestation Engine from public docker image
+
+== Pulling image from GitHub packages
+
+[source, bash]
+----
+docker pull ghcr.io/peermountain/attestation-engine:master
+----
+
+== Defining Environment variables
+
+* `DATASOURCE_URL` - url to running postgres(default: `jdbc:postgresql://localhost:5432/oracle`)
+* `DATABASE_USERNAME` & DATABASE_PASSWORD - credentials to access running postgres
+* `XMPP_DOMAIN` - xmpp domain
+* `XMPP_HOST` - host with running xmpp server(for example `prosody`)
+* `XMPP_PASSWORD` - credentials for attestation engine to login to xmpp server (account public address will be used as username)
+* `XMPP_ADMIN_USERNAME` & `XMPP_ADMIN_PASSWORD` - xmpp admin credentials (admin should be able to create users)
+* `ACCOUNT_PRIVATE_KEY` - wallet private key
+* `WEB3_HOST` - link to blockchain net API
+* `CASHIER_CONTRACT_ADDRESS` & `TRUST_TOKEN_ADDRESS` & `ERC20_ADDRESS` - addresses of deployed contracts
+
+== Starting Attestation Engine
+
+[source,bash]
+----
+docker run \
+    -e ACCOUNT_PRIVATE_KEY=${ACCOUNT_PRIVATE_KEY} \
+    -e CASHIER_CONTRACT_ADDRESS=${CASHIER_CONTRACT_ADDRESS} \
+    -e ERC20_ADDRESS=${ERC20_ADDRESS} \
+    -e TRUST_TOKEN_ADDRESS=${TRUST_TOKEN_ADDRESS} \
+    -e WEB3_HOST=${WEB3_HOST} \
+    -e XMPP_ADMIN_PASSWORD=${XMPP_ADMIN_PASSWORD} \
+    -e XMPP_PASSWORD=${XMPP_PASSWORD} \
+    ghcr.io/peermountain/attestation-engine:master
+----
